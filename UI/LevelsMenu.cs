@@ -45,7 +45,7 @@ static class LevelsMenu
 
             obj.GetComponent<Button>().onClick.AddListener((System.Action)(() =>
             {
-                GameSceneManager.openCustomLevel(index);
+                LevelManager.openCustomLevel(index);
             }));
         }
     }

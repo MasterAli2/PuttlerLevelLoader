@@ -4,78 +4,55 @@ using MelonLoader.TinyJSON;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public static class GameSceneManager
+public static class LevelManager
 {
-    public static CustomLevel? loadLevel;
-    public static CustomLevel? activeLevel;
+    public static CustomLevel? currentLevel;
     public static int levelIndex;
     public static List<GameObject>? currentLevelObjs;
 
     public static bool inCustomLevel;
     public static void openCustomLevel(int levelIndex)
     {
-        loadLevel = LocalData.customLevels[levelIndex];
-        GameSceneManager.levelIndex = levelIndex;
+        MelonLogger.Msg(levelIndex);
+        MelonLogger.Msg(LocalData.customLevels.Count);
+        currentLevel = LocalData.customLevels[levelIndex];
+
+        LevelManager.levelIndex = levelIndex;
         inCustomLevel = true;
         //MelonLogger.Msg(loadLevel == null);
-        SceneManager.LoadScene(5);
+
+        GameSceneManager.nextGameSceneLoadTarget = 1;
+
+        SceneManager.LoadScene(GameSceneManager.gameSceneIndex);
     }
 
 
-    public static void onSceneLoaded(string sceneName)
+    public static void loadCustomLevel()
     {
-
-        if (sceneName != "Game")
-        {
-            return;
-        }
-
-        if (loadLevel == null)
-        {
-            MelonLogger.Warning("Game scene loaded but no level queued");
-            return;
-        }
-
-        handleGameLoad();
-    }
-
-    static void handleGameLoad()
-    {
-        if (loadLevel == null){
+        if (currentLevel == null){
             MelonLogger.Error("Failed to load custom level");
             return;
         }
 
         LevelBuilder.getPrefabsAndEmpty();
 
-        currentLevelObjs = LevelBuilder.buildFromObj(loadLevel);
-        LevelBuilder.setMetadata(loadLevel);
-        activeLevel = loadLevel;
-        loadLevel = null;
+        currentLevelObjs = LevelBuilder.buildFromObj(currentLevel);
+        LevelBuilder.setMetadata(currentLevel);
+
         inCustomLevel = true;
+        GameSceneManager.gameUpdateTarget = 1;
+
         
     }
     public static void reset()
     {
-        loadLevel = null;
-        activeLevel = null;
+        currentLevel = null;
         levelIndex = -1;
         inCustomLevel = false;
     }
 
-    public static void onUpdateScene(string sceneName)
+    public static void onUpdateScene()
     {
-        if (sceneName != "Game")
-        {
-            return;
-        }
-        if (sceneName != "Game" && inCustomLevel && loadLevel == null)
-        {
-            reset();
-            return;
-        }
-        
-
         if (Input.GetKeyDown("tab"))
         {
             LocalData.init();
@@ -98,8 +75,8 @@ public static class GameSceneManager
             }
 
             if (level == null) return;
-            activeLevel = level;
-            currentLevelObjs = LevelBuilder.buildFromObj(activeLevel);
+            currentLevel = level;
+            currentLevelObjs = LevelBuilder.buildFromObj(currentLevel);
 
         }
     }

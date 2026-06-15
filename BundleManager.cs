@@ -31,12 +31,4 @@ public static class BundleManager
         }
 
     }
-    private static IEnumerator LoadBundleAsync(string path)
-    {
-        yield return null; // wait one frame to be safe
-
-
-        
-
-    }
 }
