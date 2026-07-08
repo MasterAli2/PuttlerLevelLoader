@@ -29,7 +29,7 @@ public static class GameSceneManager
             nextGameSceneLoadTarget = 0;
             return;
         }
-        else
+        else //if (nextGameSceneLoadTarget == 2)
         {
             EditorManager.loadEditor();
         }
@@ -43,7 +43,7 @@ public static class GameSceneManager
         {
             if (gameUpdateTarget == 1)
             {
-                LevelManager.reset();
+                //LevelManager.reset();
             }
 
             return;
@@ -51,8 +51,7 @@ public static class GameSceneManager
 
         if (gameUpdateTarget == 1)
         {
-            lastGameUpdateTarget = gameUpdateTarget;
-            LevelManager.onUpdateScene();
+
         }
         else
         {

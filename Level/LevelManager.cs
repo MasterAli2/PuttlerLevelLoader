@@ -2,10 +2,13 @@ using Harmony;
 using MelonLoader;
 using MelonLoader.TinyJSON;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
-public static class LevelManager
+[MelonLoader.RegisterTypeInIl2Cpp]
+public class LevelManager : MonoBehaviour
 {
+    public LevelManager(IntPtr ptr) : base(ptr) {}
     public static CustomLevel? currentLevel;
     public static int levelIndex;
     public static List<GameObject>? currentLevelObjs;
@@ -13,18 +16,16 @@ public static class LevelManager
     public static bool inCustomLevel;
     public static void openCustomLevel(int levelIndex)
     {
-        MelonLogger.Msg(levelIndex);
-        MelonLogger.Msg(LocalData.customLevels.Count);
         currentLevel = LocalData.customLevels[levelIndex];
 
         LevelManager.levelIndex = levelIndex;
         inCustomLevel = true;
-        //MelonLogger.Msg(loadLevel == null);
 
         GameSceneManager.nextGameSceneLoadTarget = 1;
 
         SceneManager.LoadScene(GameSceneManager.gameSceneIndex);
     }
+
 
 
     public static void loadCustomLevel()
@@ -40,18 +41,21 @@ public static class LevelManager
         LevelBuilder.setMetadata(currentLevel);
 
         inCustomLevel = true;
-        GameSceneManager.gameUpdateTarget = 1;
 
-        
+        GameObject managerObj = new GameObject("Level Manager");
+        managerObj.AddComponent<LevelManager>();
+    
     }
-    public static void reset()
+    public static void OnDestroy()
     {
         currentLevel = null;
         levelIndex = -1;
         inCustomLevel = false;
+
+        MelonLogger.Msg("OnDestroy() LevelManager");
     }
 
-    public static void onUpdateScene()
+    public static void Update()
     {
         if (Input.GetKeyDown("tab"))
         {
