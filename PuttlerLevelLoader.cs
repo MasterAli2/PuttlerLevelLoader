@@ -9,9 +9,9 @@ public class PuttlerLevelLoader : MelonMod
 
     public override void OnInitializeMelon()
     {
+        LevelObjectRegistry.Build();
         BundleManager.init();
         LocalData.init();
-
     }
 
     public override void OnUpdate()
