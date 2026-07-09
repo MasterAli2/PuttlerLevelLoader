@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RegisterLevelObject("hole")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaHoleLevelObject : MonoBehaviour, IBaseLevelObject
+public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 

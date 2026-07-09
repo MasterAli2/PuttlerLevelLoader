@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RegisterLevelObject("moving platform")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaMovingPlatformLevelObject : MonoBehaviour, IBaseLevelObject
+public class VanillaMovingPlatformLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 

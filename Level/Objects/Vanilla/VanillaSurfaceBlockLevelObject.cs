@@ -5,7 +5,7 @@ using UnityEngine;
 
 [RegisterLevelObject("block")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaSurfaceBlockLevelObject : MonoBehaviour, IBaseLevelObject
+public class VanillaSurfaceBlockLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 

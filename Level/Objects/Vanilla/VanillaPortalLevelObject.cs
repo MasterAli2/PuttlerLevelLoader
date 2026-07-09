@@ -5,7 +5,7 @@ using Il2Cpp;
 
 [RegisterLevelObject("portal")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaPortalLevelObject : MonoBehaviour, IBaseLevelObject
+public class VanillaPortalLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 

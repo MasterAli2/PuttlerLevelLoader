@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RegisterLevelObject("blackhole")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaBlackholeLevelObject : MonoBehaviour, IBaseLevelObject
+public class VanillaBlackholeLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 
