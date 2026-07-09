@@ -26,7 +26,7 @@ public class VanillaHoleLevelObject : MonoBehaviour, IBaseLevelObject
     // this is kept here cuz of how complicated it is, i have no idea how and why this works
     public static GameObject placeLevelHole(Vector3 position, float rotation, Vector3 size)
     {
-        GameObject obj = Utils.spawnPrefab(LevelBuilder.prefabLevelHole);
+        GameObject obj = Utils.spawnPrefab(prefab);
 
         obj.transform.position = position;
         obj.transform.eulerAngles = new Vector3(0f, 0f, rotation);

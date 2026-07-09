@@ -27,7 +27,7 @@ public class VanillaMovingPlatformLevelObject : MonoBehaviour, IBaseLevelObject
 
     public static GameObject placeMovingPlatform(Vector3 start, Vector3 end, float rotation)
     {
-        GameObject obj = Utils.spawnPrefab(LevelBuilder.prefabMovingPlatform);
+        GameObject obj = Utils.spawnPrefab(prefab);
 
         obj.transform.position = start;
         obj.transform.eulerAngles = new Vector3(0f, 0f, rotation);

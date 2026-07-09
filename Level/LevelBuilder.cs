@@ -14,51 +14,31 @@ using System.Drawing;
 
 public static class LevelBuilder
 {
-    public static GameObject prefabFountain;
-    public static GameObject prefabBlackhole;
 
-    public static GameObject prefabSwitch;
-    public static GameObject prefabPortal;
-    public static GameObject prefabMovingPlatform;
-
-    public static Transform rootHoleComps;
-    public static GameObject prefabSurfaceBlock;
-    public static GameObject prefabPassageBlock;
-    public static GameObject prefabSandSurface;
-
-    public static GameObject prefabLevelHole;
     public static GameObject objectObjectiveBall;
 
     public static void getPrefabsAndEmpty()
     {
-        prefabFountain = GameObject.Find("Fountain");
-        prefabBlackhole = GameObject.Find("Blackhole");
-
-        prefabSwitch = GameObject.Find("Switch");
-        prefabPortal = GameObject.Find("Portal");
-        prefabMovingPlatform = GameObject.Find("Moving Platform");
-
-        rootHoleComps = GameObject.Find("Hole Components").transform;
-        prefabSurfaceBlock = rootHoleComps.Find("Surface Block (2)").gameObject;
-        prefabPassageBlock = rootHoleComps.Find("Passage Block (3)").gameObject;
-        prefabSandSurface = rootHoleComps.Find("Sand Surface").gameObject;
-
-        prefabLevelHole = GameObject.Find("Level Hole");
         objectObjectiveBall = GameObject.Find("Objective Ball");
 
-        Utils.HideAndDisable(prefabFountain);
-        Utils.HideAndDisable(prefabBlackhole);
-        Utils.HideAndDisable(prefabSwitch);
-        Utils.HideAndDisable(prefabPortal);
-        Utils.HideAndDisable(prefabMovingPlatform);
-        Utils.HideAndDisable(prefabSurfaceBlock);
+        Transform rootHoleComps = GameObject.Find("Hole Components").transform;
+
+        GameObject prefabPassageBlock = rootHoleComps.Find("Passage Block (3)").gameObject;
+        GameObject prefabSandSurface = rootHoleComps.Find("Sand Surface").gameObject;
+
+        GameObject prefabFountain = GameObject.Find("Fountain");
+        GameObject prefabSwitch = GameObject.Find("Switch");
+
+
+        foreach (var pair in LevelObjectRegistry.CleanupRegistry)
+        {
+            pair.Value.Invoke();
+        }
+
         Utils.HideAndDisable(prefabPassageBlock);
         Utils.HideAndDisable(prefabSandSurface);
-        Utils.HideAndDisable(prefabLevelHole);
-
-        // dont delete ball cuz i dont feel like it
-        // HideAndDisable(prefabObjectiveBall);
-
+        Utils.HideAndDisable(prefabFountain);
+        Utils.HideAndDisable(prefabSwitch);
         Utils.HideAndDisable(rootHoleComps.Find("Surface Block (1)").gameObject);
     }
 
@@ -69,33 +49,21 @@ public static class LevelBuilder
     public static List<GameObject> buildFromObj(CustomLevel level)
     {
 
-        LevelPlacer.setObjectiveBall(new Vector3(level.ballX, level.ballY, 0f));
+        placeObjectiveBall(new Vector3(level.ballX, level.ballY, 0f));
         List<GameObject> result = new List<GameObject>();
 
         foreach (SerialLevelObject obj in level.levelObjects)
         {
             GameObject? newObj = null;
-            switch (obj.type)
+            
+            if (!LevelObjectRegistry.Registry.ContainsKey(obj.type))
             {
-                case "hole":
-                    newObj = LevelPlacer.placeLevelHole(Vec3D.fromJson(obj.data["pos"]), obj.data["rot"].GetSingle(), Vec3D.fromJson(obj.data["size"]));
-                    break;
-                case "blackhole":
-                    newObj = Utils.placeBlackhole(Vec3D.fromJson(obj.data["pos"]));
-                    break;
-                case "portal":
-                    newObj = LevelPlacer.placePortal(Vec3D.fromJson(obj.data["entry"]), Vec3D.fromJson(obj.data["exit"]));
-                    break;
-                case "moving platform":
-                    newObj = LevelPlacer.placeMovingPlatform(Vec3D.fromJson(obj.data["start"]), Vec3D.fromJson(obj.data["end"]), obj.data["rot"].GetSingle());
-                    break;
-                case "block":
-                    newObj = LevelPlacer.spawnPrefabWithValues(prefabSurfaceBlock, Vec3D.fromJson(obj.data["pos"]), Vec3D.fromJson(obj.data["size"]), obj.data["rot"].GetSingle());
-                    break;
-                default:
-                    MelonLogger.Warning("Unknown level object type encountered");
-                    break;
+                MelonLogger.Warning("Unknown level object type found");
+                continue;
             }
+
+            newObj = LevelObjectRegistry.Registry[obj.type].Invoke(obj);
+
             if (newObj != null)
             {
                 result.Add(newObj); 
@@ -112,5 +80,13 @@ public static class LevelBuilder
     {
         GameObject.Find("Par Number Text (2)").GetComponent<TextMeshProUGUI>().text = level.par.ToString();
         GameObject.Find("Hole Number Text").GetComponent<TextMeshProUGUI>().text = level.name.ToString();
+    }
+
+    public static void placeObjectiveBall(Vector3 position)
+    {
+        objectObjectiveBall.transform.position = position;
+
+        // this is probably to fix starting behaviour
+        objectObjectiveBall.GetComponent<ObjectiveBall>().Awake();
     }
 }

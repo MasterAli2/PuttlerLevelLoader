@@ -27,7 +27,7 @@ public class VanillaPortalLevelObject : MonoBehaviour, IBaseLevelObject
 
     public static GameObject placePortal(Vector3 entryPos, Vector3 exitPos)
     {
-        GameObject obj = Utils.spawnPrefab(LevelBuilder.prefabPortal);
+        GameObject obj = Utils.spawnPrefab(prefab);
 
         obj.transform.position = Vector3.zero;
 
