@@ -11,7 +11,7 @@ public class VanillaSurfaceBlockLevelObject : MonoBehaviour, IBaseLevelObject
 
     public static GameObject Place(SerialLevelObject serialLevelObject)
     {
-        GameObject obj = LevelPlacer.spawnPrefabWithValues(prefab,
+        GameObject obj = Utils.spawnPrefabWithValues(prefab,
          Vec3D.fromJson(serialLevelObject.data["pos"]),
           Vec3D.fromJson(serialLevelObject.data["size"]),
            serialLevelObject.data["rot"].GetSingle());

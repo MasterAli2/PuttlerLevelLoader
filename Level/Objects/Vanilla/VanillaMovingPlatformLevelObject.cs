@@ -11,7 +11,7 @@ public class VanillaMovingPlatformLevelObject : MonoBehaviour, IBaseLevelObject
 
     public static GameObject Place(SerialLevelObject serialLevelObject)
     {
-        GameObject obj = LevelPlacer.placeMovingPlatform(
+        GameObject obj = placeMovingPlatform(
             Vec3D.fromJson(serialLevelObject.data["start"]),
             Vec3D.fromJson(serialLevelObject.data["end"]),
             serialLevelObject.data["rot"].GetSingle());
@@ -23,5 +23,18 @@ public class VanillaMovingPlatformLevelObject : MonoBehaviour, IBaseLevelObject
     {
         prefab = GameObject.Find("Moving Platform");
         Utils.HideAndDisable(prefab);
+    }
+
+    public static GameObject placeMovingPlatform(Vector3 start, Vector3 end, float rotation)
+    {
+        GameObject obj = Utils.spawnPrefab(LevelBuilder.prefabMovingPlatform);
+
+        obj.transform.position = start;
+        obj.transform.eulerAngles = new Vector3(0f, 0f, rotation);
+
+
+        obj.transform.GetChild(3).position = end;
+
+        return obj;
     }
 }

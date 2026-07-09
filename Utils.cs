@@ -48,5 +48,24 @@ public static class Utils
         obj.SetActive(false);
         obj.hideFlags = HideFlags.HideAndDontSave;
     }
+    public static GameObject spawnPrefabWithValues(GameObject prefab, Vector3 position = default(Vector3), Vector3 size = default(Vector3), float rotation = 0f)
+    {
+        GameObject obj = Utils.spawnPrefab(prefab);
+
+        obj.transform.position = position;
+
+        obj.transform.eulerAngles = new Vector3(0f, 0f, rotation);
+        obj.transform.localScale = size;
+
+        return obj;
+    }
+    public static GameObject spawnPrefab(GameObject prefab)
+    {
+        GameObject obj = GameObject.Instantiate(prefab);
+        obj.hideFlags = HideFlags.None;
+        obj.SetActive(true);
+
+        return obj;
+    }
     
 }

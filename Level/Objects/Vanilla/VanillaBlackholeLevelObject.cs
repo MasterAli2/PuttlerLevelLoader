@@ -11,7 +11,7 @@ public class VanillaBlackholeLevelObject : MonoBehaviour, IBaseLevelObject
 
     public static GameObject Place(SerialLevelObject serialLevelObject)
     {
-        GameObject obj = LevelPlacer.placeBlackhole(Vec3D.fromJson(serialLevelObject.data["pos"]));
+        GameObject obj = Utils.spawnPrefabWithValues(prefab, Vec3D.fromJson(serialLevelObject.data["pos"]));
         obj.AddComponent<VanillaBlackholeLevelObject>();
         return obj;
     }

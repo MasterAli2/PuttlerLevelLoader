@@ -81,7 +81,7 @@ public static class LevelBuilder
                     newObj = LevelPlacer.placeLevelHole(Vec3D.fromJson(obj.data["pos"]), obj.data["rot"].GetSingle(), Vec3D.fromJson(obj.data["size"]));
                     break;
                 case "blackhole":
-                    newObj = LevelPlacer.placeBlackhole(Vec3D.fromJson(obj.data["pos"]));
+                    newObj = Utils.placeBlackhole(Vec3D.fromJson(obj.data["pos"]));
                     break;
                 case "portal":
                     newObj = LevelPlacer.placePortal(Vec3D.fromJson(obj.data["entry"]), Vec3D.fromJson(obj.data["exit"]));
