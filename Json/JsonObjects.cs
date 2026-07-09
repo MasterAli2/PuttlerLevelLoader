@@ -10,7 +10,7 @@ public class CustomLevel
     public int par;
     public float ballX;
     public float ballY;
-    public List<LevelObject> levelObjects;
+    public List<SerialLevelObject> levelObjects;
 
     public string ToJson()
     {
@@ -24,19 +24,19 @@ public class CustomLevel
 
 }
 
-public class LevelObject
+public class SerialLevelObject
 {
     public string type;
     public Dictionary<string, JsonElement> data = new();
 
     public string ToJson()
     {
-        return JsonSerializer.Serialize<LevelObject>(this, Constants.jsonSerializerOptions);
+        return JsonSerializer.Serialize<SerialLevelObject>(this, Constants.jsonSerializerOptions);
     }
 
-    public static LevelObject FromJson(string json)
+    public static SerialLevelObject FromJson(string json)
     {
-        return JsonSerializer.Deserialize<LevelObject>(json, Constants.jsonSerializerOptions) ?? new LevelObject();
+        return JsonSerializer.Deserialize<SerialLevelObject>(json, Constants.jsonSerializerOptions) ?? new SerialLevelObject();
     }
 }
 
