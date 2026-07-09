@@ -46,29 +46,23 @@ public static class LevelBuilder
         prefabLevelHole = GameObject.Find("Level Hole");
         objectObjectiveBall = GameObject.Find("Objective Ball");
 
-        HideAndDisable(prefabFountain);
-        HideAndDisable(prefabBlackhole);
-        HideAndDisable(prefabSwitch);
-        HideAndDisable(prefabPortal);
-        HideAndDisable(prefabMovingPlatform);
-        HideAndDisable(prefabSurfaceBlock);
-        HideAndDisable(prefabPassageBlock);
-        HideAndDisable(prefabSandSurface);
-        HideAndDisable(prefabLevelHole);
+        Utils.HideAndDisable(prefabFountain);
+        Utils.HideAndDisable(prefabBlackhole);
+        Utils.HideAndDisable(prefabSwitch);
+        Utils.HideAndDisable(prefabPortal);
+        Utils.HideAndDisable(prefabMovingPlatform);
+        Utils.HideAndDisable(prefabSurfaceBlock);
+        Utils.HideAndDisable(prefabPassageBlock);
+        Utils.HideAndDisable(prefabSandSurface);
+        Utils.HideAndDisable(prefabLevelHole);
 
         // dont delete ball cuz i dont feel like it
         // HideAndDisable(prefabObjectiveBall);
 
-        HideAndDisable(rootHoleComps.Find("Surface Block (1)").gameObject);
+        Utils.HideAndDisable(rootHoleComps.Find("Surface Block (1)").gameObject);
     }
 
-    static void HideAndDisable(GameObject obj)
-    {
-        if (obj == null) return;
 
-        obj.SetActive(false);
-        obj.hideFlags = HideFlags.HideAndDontSave;
-    }
 
     
 
@@ -78,7 +72,7 @@ public static class LevelBuilder
         LevelPlacer.setObjectiveBall(new Vector3(level.ballX, level.ballY, 0f));
         List<GameObject> result = new List<GameObject>();
 
-        foreach (LevelObject obj in level.levelObjects)
+        foreach (SerialLevelObject obj in level.levelObjects)
         {
             GameObject? newObj = null;
             switch (obj.type)
