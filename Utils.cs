@@ -41,5 +41,12 @@ public static class Utils
         float offset = (delta * meshMultiplier) * 0.5f;
         t.localPosition += new Vector3(0f, anchorBottom ? offset : -offset, 0f);
     }
+    public static void HideAndDisable(GameObject obj)
+    {
+        if (obj == null) return;
+
+        obj.SetActive(false);
+        obj.hideFlags = HideFlags.HideAndDontSave;
+    }
     
 }
