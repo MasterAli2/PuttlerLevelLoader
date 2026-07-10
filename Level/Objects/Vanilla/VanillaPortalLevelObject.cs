@@ -45,4 +45,13 @@ public class VanillaPortalLevelObject : BaseLevelObject, IBaseLevelObject
 
         return obj;
     }
+
+    public override void OnEditorPickup()
+    {
+        // nothing
+    }
+    public override void OnEditorDrop()
+    {
+        // nothing
+    }
 }

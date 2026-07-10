@@ -30,4 +30,13 @@ public class VanillaSurfaceBlockLevelObject : BaseLevelObject, IBaseLevelObject
 
         Utils.HideAndDisable(prefab);
     }
+
+    public override void OnEditorPickup()
+    {
+        // nothing
+    }
+    public override void OnEditorDrop()
+    {
+        // nothing
+    }
 }

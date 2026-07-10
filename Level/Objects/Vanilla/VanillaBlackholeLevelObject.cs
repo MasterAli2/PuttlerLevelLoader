@@ -22,4 +22,13 @@ public class VanillaBlackholeLevelObject : BaseLevelObject, IBaseLevelObject
         prefab = GameObject.Find("Blackhole");
         Utils.HideAndDisable(prefab);
     }
+
+    public override void OnEditorPickup()
+    {
+        // nothing
+    }
+    public override void OnEditorDrop()
+    {
+        // nothing
+    }
 }

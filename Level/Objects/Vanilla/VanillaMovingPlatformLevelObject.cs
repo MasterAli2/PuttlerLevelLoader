@@ -1,4 +1,5 @@
 using System;
+using Il2Cpp;
 using UnityEngine;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
@@ -6,9 +7,20 @@ using UnityEngine;
 [MelonLoader.RegisterTypeInIl2Cpp]
 public class VanillaMovingPlatformLevelObject : BaseLevelObject, IBaseLevelObject
 {
+    public MovingPlatform movingPlatform;
+    public MovingShadowPlatform movingShadowPlatform;
+
     public static GameObject prefab;
 
     public VanillaMovingPlatformLevelObject(IntPtr ptr) : base(ptr) {}
+
+    public new void Awake()
+    {
+        base.Awake();
+
+        movingPlatform = GetComponent<MovingPlatform>();
+        movingShadowPlatform = GetComponent<MovingShadowPlatform>();
+    }
 
     public static GameObject Place(SerialLevelObject serialLevelObject)
     {
@@ -37,5 +49,15 @@ public class VanillaMovingPlatformLevelObject : BaseLevelObject, IBaseLevelObjec
         obj.transform.GetChild(3).position = end;
 
         return obj;
+    }
+
+    public override void OnEditorPickup()
+    {
+        // nothing
+    }
+    public override void OnEditorDrop()
+    {
+        movingPlatform.Start();
+        movingShadowPlatform.Start();
     }
 }

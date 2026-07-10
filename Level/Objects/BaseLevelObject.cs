@@ -7,5 +7,17 @@ using UnityEngine;
 public class BaseLevelObject : MonoBehaviour
 {
     public BaseLevelObject(IntPtr ptr) : base(ptr) {}
+
+    public void Awake()
+    {
+        gameObject.tag = "Level Object";
+    }
+
+    public virtual void OnDestroy(){}
+
+
+
+    public virtual void OnEditorPickup(){}
+    public virtual void OnEditorDrop(){}
     
 }

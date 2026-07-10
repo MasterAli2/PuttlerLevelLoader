@@ -53,4 +53,13 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
         return obj;
 
     }
+
+    public override void OnEditorPickup()
+    {
+        // nothing
+    }
+    public override void OnEditorDrop()
+    {
+        // nothing
+    }
 }
