@@ -64,5 +64,9 @@
     
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  <Exec Command="mkdir -p &quot;/home/ali/.local/share/com.kesomannen.gale/puttler/profiles/Default/Mods&quot; &amp;&amp; cp -f &quot;$(TargetDir)$(TargetFileName)&quot; &quot;/home/ali/.local/share/com.kesomannen.gale/puttler/profiles/Default/Mods/&quot;" />
+</Target>
+
 
 </Project>
