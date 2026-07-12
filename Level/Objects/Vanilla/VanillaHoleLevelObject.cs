@@ -7,12 +7,14 @@ using UnityEngine;
 public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
+    public static Sprite sprite;
 
     public VanillaHoleLevelObject(IntPtr ptr) : base(ptr) {}
 
     public static GameObject Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = placeLevelHole(Vec3D.fromJson(serialLevelObject.data["pos"]), serialLevelObject.data["rot"].GetSingle(), Vec3D.fromJson(serialLevelObject.data["size"]));
+        
         obj.AddComponent<VanillaHoleLevelObject>();
         return obj;
         
@@ -20,6 +22,12 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
 
     public static void CleanScene()
     {
+        if (sprite == null)
+        {
+            Texture2D tex = Texture2D.whiteTexture;
+            sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), tex.width);
+        }
+
         prefab = GameObject.Find("Level Hole");
         Utils.HideAndDisable(prefab);
     }
@@ -42,6 +50,26 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
         leftSize = size.y;
         vertSize = size.z;
 
+        SpriteRenderer leftSpriteRenderer = leftSide.GetComponent<SpriteRenderer>();
+        if (leftSpriteRenderer != null)
+        {
+            leftSpriteRenderer.sprite = sprite;
+            leftSpriteRenderer.color = Color.black;
+        }
+        SpriteRenderer rightSpriteRenderer = rightSide.GetComponent<SpriteRenderer>();
+        if (rightSpriteRenderer != null)
+        {
+            rightSpriteRenderer.sprite = sprite;
+            rightSpriteRenderer.color = Color.black;
+        }
+        SpriteRenderer middleSpriteRenderer = middleSide.GetComponent<SpriteRenderer>();
+        if (middleSpriteRenderer != null)
+        {
+            middleSpriteRenderer.sprite = sprite;
+            middleSpriteRenderer.color = Color.black;
+        }
+
+        /*
         Utils.ResizeX(leftSide, leftSize, false, 2.56f);  
         Utils.ResizeY(leftSide, vertSize, false, 2.56f); 
 
@@ -49,6 +77,24 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
         Utils.ResizeY(rightSide, vertSize, false, 2.56f);
 
         Utils.ResizeY(middleSide, vertSize-1*(diffA), false, 2.56f);
+        */
+        
+        leftSide.localScale = new Vector3(leftSide.localScale.x*2.56f, leftSide.localScale.y*2.56f, 1f);
+        rightSide.localScale = new Vector3(rightSide.localScale.x*2.56f, rightSide.localScale.y*2.56f, 1f);
+        middleSide.localScale = new Vector3(middleSide.localScale.x*2.56f, middleSide.localScale.y*2.56f, 1f);
+
+        Utils.ResizeX(leftSide, leftSize, false);  
+        Utils.ResizeY(leftSide, vertSize, false); 
+
+        Utils.ResizeX(rightSide, rightSize, true);
+        Utils.ResizeY(rightSide, vertSize, false);
+        
+        Utils.ResizeY(middleSide, vertSize-1*diffA, false);
+
+        leftSide.GetComponent<BoxCollider2D>().size = Vector2.one;
+        rightSide.GetComponent<BoxCollider2D>().size = Vector2.one;
+        middleSide.GetComponent<BoxCollider2D>().size = Vector2.one;
+
 
         return obj;
 
