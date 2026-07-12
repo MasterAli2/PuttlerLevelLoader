@@ -31,7 +31,7 @@ public static class GameSceneManager
         }
         else //if (nextGameSceneLoadTarget == 2)
         {
-            EditorManager.loadEditor();
+            //EditorUI.loadEditor();
         }
 
 
@@ -55,7 +55,7 @@ public static class GameSceneManager
         }
         else
         {
-            EditorManager.onUpdateScene();
+            //EditorUI.onUpdateScene();
         }
 
 
