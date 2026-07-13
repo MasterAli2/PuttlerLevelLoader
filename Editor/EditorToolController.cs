@@ -1,19 +1,30 @@
+using System;
 using System.Drawing;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
-using UnityEngine.Events;
 
 [MelonLoader.RegisterTypeInIl2Cpp]
 class EditorToolController : MonoBehaviour
 {
+    public static EditorToolController Instance {get; private set;}
+
     public EditorToolController(IntPtr ptr) : base(ptr) {}
+
+    public event Action onDrop;
 
     public bool movingObject = false;
     public Vector3 startPos;
     public Vector3 startRot;
 
     public Vector3 offset;
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
@@ -61,7 +72,7 @@ class EditorToolController : MonoBehaviour
         }
     }
 
-    void Pickup()
+    public void Pickup()
     {
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
@@ -76,6 +87,8 @@ class EditorToolController : MonoBehaviour
 
         EditorManager.Instance.mainSelectedObject.OnEditorDrop();
         movingObject = false;
+
+        onDrop?.Invoke();
     }
 
     public void Cancel()
