@@ -14,6 +14,7 @@ public class EditorManager : MonoBehaviour
     {
         gameObject.AddComponent<EditorUI>();
         gameObject.AddComponent<EditorToolController>();
+        gameObject.AddComponent<EditorCamera>();
 
     }
     
