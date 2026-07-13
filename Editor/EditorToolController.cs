@@ -1,6 +1,8 @@
 using System.Drawing;
+using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
+using UnityEngine.Events;
 
 [MelonLoader.RegisterTypeInIl2Cpp]
 class EditorToolController : MonoBehaviour
@@ -8,9 +10,18 @@ class EditorToolController : MonoBehaviour
     public EditorToolController(IntPtr ptr) : base(ptr) {}
 
     public bool movingObject = false;
+    public Vector3 startPos;
+    public Vector3 startRot;
 
     public Vector3 offset;
 
+    void Start()
+    {
+        GameManager.Instance.OnGameStart.AddListener((System.Action)(() =>
+        {
+            Cancel();
+        }));
+    }
     void Update()
     {
         
@@ -37,7 +48,7 @@ class EditorToolController : MonoBehaviour
         }
 
         bool down = Input.GetKeyDown(KeyCode.M);
-        if (down && EditorManager.Instance.isActive)
+        if (down && EditorManager.Instance.isActive && !GameManager.Instance.IsStarted)
         {
             if (!movingObject)
             {
@@ -52,7 +63,12 @@ class EditorToolController : MonoBehaviour
 
     void Pickup()
     {
-        movingObject = EditorManager.Instance.mainSelectedObject ? true : false;
+        if (EditorManager.Instance.mainSelectedObject == null) return;
+
+        startPos = EditorManager.Instance.mainSelectedObject.transform.position;
+        startRot = EditorManager.Instance.mainSelectedObject.transform.eulerAngles;
+
+        movingObject = true;
     }
     void Drop()
     {
@@ -60,5 +76,15 @@ class EditorToolController : MonoBehaviour
 
         EditorManager.Instance.mainSelectedObject.OnEditorDrop();
         movingObject = false;
+    }
+
+    public void Cancel()
+    {
+        if (!movingObject || EditorManager.Instance.mainSelectedObject == null) return;
+
+        EditorManager.Instance.mainSelectedObject.transform.position = startPos;
+        EditorManager.Instance.mainSelectedObject.transform.eulerAngles = startRot;
+
+        Drop();
     }
 }

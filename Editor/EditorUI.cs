@@ -75,9 +75,4 @@ public class EditorUI : MonoBehaviour
         editorButtons1.transform.name = "Editor Buttons";
         editorButtons1.SetActive(false);
     }
-    public static void onUpdateScene()
-    {
-        
-    }
-
 }
