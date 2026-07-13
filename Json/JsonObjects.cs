@@ -65,4 +65,9 @@ public struct Vec3D
 
         return Vector3.zero;
     }
+    public static JsonElement toJson(Vector3 vector)
+    {
+        return JsonSerializer.SerializeToElement(new[] { vector.x, vector.y, vector.z }, Constants.jsonSerializerOptions);
+    }
+
 }
