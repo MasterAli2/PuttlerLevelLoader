@@ -50,6 +50,10 @@ public static class Utils
     }
     public static GameObject spawnPrefabWithValues(GameObject prefab, Vector3 position = default(Vector3), Vector3 size = default(Vector3), float rotation = 0f)
     {
+        if (size == default(Vector3))
+        {
+            size = Vector3.one;
+        }
         GameObject obj = Utils.spawnPrefab(prefab);
 
         obj.transform.position = position;
