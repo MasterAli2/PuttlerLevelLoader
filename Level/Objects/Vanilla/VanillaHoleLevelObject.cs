@@ -11,13 +11,18 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
 
     public VanillaHoleLevelObject(IntPtr ptr) : base(ptr) {}
 
-    public static GameObject Place(SerialLevelObject serialLevelObject)
+    public static GameObject[] Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = placeLevelHole(Vec3D.fromJson(serialLevelObject.data["pos"]), serialLevelObject.data["rot"].GetSingle(), Vec3D.fromJson(serialLevelObject.data["size"]));
         
         obj.AddComponent<VanillaHoleLevelObject>();
-        return obj;
+        return new GameObject[] { obj };
         
+    }
+
+    public static void ApplyEditorPlaceButtons(GameObject gameObject)
+    {
+        // nothing
     }
 
     public static void CleanScene()
@@ -107,5 +112,10 @@ public class VanillaHoleLevelObject : BaseLevelObject, IBaseLevelObject
     public override void OnEditorDrop()
     {
         // nothing
+    }
+
+    public static GameObject[] PlaceDefault()
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -21,8 +22,7 @@ public class VanillaMovingPlatformLevelObject : LinkedLevelObject, IBaseLevelObj
     public VanillaMovingPlatformLevelObject(IntPtr ptr) : base(ptr) {}
 
 
-
-    public static GameObject Place(SerialLevelObject serialLevelObject)
+    public static GameObject[] Place(SerialLevelObject serialLevelObject)
     {
         (Transform obj1, Transform obj2, Transform pointB, Transform pointA, Transform myShadowObject) = placeMovingPlatform(
             Vec3D.fromJson(serialLevelObject.data["start"]),
@@ -62,7 +62,20 @@ public class VanillaMovingPlatformLevelObject : LinkedLevelObject, IBaseLevelObj
 
 
 
-        return platform.gameObject;
+        return new GameObject[] { platform.gameObject, shadow.gameObject };
+    }
+
+    public static void ApplyEditorPlaceButtons(GameObject gameObject)
+    {
+        Image image = gameObject.transform.GetChild(0).GetComponent<Image>();
+
+        image.sprite = Utils.RuntimeSprite.square;
+        image.color = new Color(255, 0, 155, 255);
+
+        RectTransform rectTransform = image.rectTransform;
+
+
+        rectTransform.localScale = new Vector3(rectTransform.localScale.x*2f, rectTransform.localScale.y*0.2f, rectTransform.localScale.z);
     }
 
     public static void CleanScene()
@@ -196,6 +209,19 @@ public class VanillaMovingPlatformLevelObject : LinkedLevelObject, IBaseLevelObj
         //movingShadowPlatform.Start();
         movingShadowPlatform.startPosition = pointA.position;
         movingShadowPlatform.targetPosition = a;
+
+    }
+
+    public static GameObject[] PlaceDefault()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject();
+
+        serialLevelObject.data["start"] = Vec3D.toJson(Vector3.zero);
+        serialLevelObject.data["end"] = Vec3D.toJson(Vector3.zero);
+        serialLevelObject.data["rot"] = JsonDocument.Parse("0").RootElement;
+
+        return VanillaMovingPlatformLevelObject.Place(serialLevelObject);
+
 
     }
 }

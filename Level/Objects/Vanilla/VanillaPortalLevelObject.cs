@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using Il2Cpp;
+using System.Text.Json;
+using UnityEngine.UI;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 [RegisterLevelObject("portal")]
@@ -11,7 +13,7 @@ public class VanillaPortalLevelObject : LinkedLevelObject, IBaseLevelObject
 
     public VanillaPortalLevelObject(IntPtr ptr) : base(ptr) {}
 
-    public static GameObject Place(SerialLevelObject serialLevelObject)
+    public static GameObject[] Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = placePortal(
             Vec3D.fromJson(serialLevelObject.data["entry"]),
@@ -22,6 +24,7 @@ public class VanillaPortalLevelObject : LinkedLevelObject, IBaseLevelObject
         GameObject audio = obj.transform.GetChild(2).gameObject;
 
         obj.transform.DetachChildren();
+        Destroy(obj);
         
         VanillaPortalLevelObject entry = entryObj.AddComponent<VanillaPortalLevelObject>();
         VanillaPortalLevelObject exit = exitObj.AddComponent<VanillaPortalLevelObject>();
@@ -43,7 +46,31 @@ public class VanillaPortalLevelObject : LinkedLevelObject, IBaseLevelObject
 
         Utils.disableCollision(exitCollision);
 
-        return obj;
+        return new GameObject[] { entry.gameObject, exit.gameObject };
+    }
+
+    public static void ApplyEditorPlaceButtons(GameObject gameObject)
+    {
+        Image outerImage = gameObject.transform.GetChild(0).GetComponent<Image>();
+
+        GameObject innerObj = GameObject.Instantiate(outerImage.gameObject, outerImage.transform.parent);
+        Image innerImage = innerObj.GetComponent<Image>();
+
+        outerImage.sprite = Utils.RuntimeSprite.circle;
+        outerImage.color = new Color(0, 155, 255, 255);
+
+        
+
+
+        innerImage.sprite = Utils.RuntimeSprite.circle;
+        innerImage.color = Color.black;
+
+        RectTransform innerRectTransform = outerImage.rectTransform;
+        innerRectTransform.localScale = new Vector3(innerRectTransform.localScale.x, innerRectTransform.localScale.y, innerRectTransform.localScale.z);
+        RectTransform outerRectTransform = outerImage.rectTransform;
+        outerRectTransform.localScale = new Vector3(outerRectTransform.localScale.x*1.25f, outerRectTransform.localScale.y*1.25f, outerRectTransform.localScale.z);
+    
+
     }
 
     public static void CleanScene()
@@ -79,5 +106,17 @@ public class VanillaPortalLevelObject : LinkedLevelObject, IBaseLevelObject
     public override void OnEditorDrop()
     {
         // nothing
+    }
+
+    public static GameObject[] PlaceDefault()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject();
+
+        serialLevelObject.data["entry"] = Vec3D.toJson(Vector3.zero);
+        serialLevelObject.data["exit"] = Vec3D.toJson(Vector3.zero);
+
+        return VanillaPortalLevelObject.Place(serialLevelObject);
+
+
     }
 }
