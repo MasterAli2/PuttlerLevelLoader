@@ -5,6 +5,8 @@ using UnityEngine;
 [MelonLoader.RegisterTypeInIl2Cpp]
 class EditorToolController : MonoBehaviour
 {
+    public EditorToolController(IntPtr ptr) : base(ptr) {}
+
     public GameObject? activeHeldGameObject;
 
     public Vector3 offset;
@@ -32,12 +34,11 @@ class EditorToolController : MonoBehaviour
                 Drop();
             }
         }
-
     }
 
     void Pickup()
     {
-        Vector3 mousePos = pointerWorldPos();
+        Vector3 mousePos = Utils.pointerWorldPos();
         mousePos.z = Mathf.Abs(Camera.current.transform.position.z);
 
 
@@ -74,14 +75,5 @@ class EditorToolController : MonoBehaviour
     }
 
 
-    Vector3 pointerWorldPos()
-    {
-        Vector3 mouseScreenPos = Input.mousePosition;
-
-        Vector3 mouseWorldPos = Camera.current.ScreenToWorldPoint(mouseScreenPos);
-
-        mouseWorldPos.z = 0f;
-
-        return mouseWorldPos;
-    }
+    
 }

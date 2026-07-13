@@ -67,5 +67,16 @@ public static class Utils
 
         return obj;
     }
+
+    public static Vector3 pointerWorldPos()
+    {
+        Vector3 mouseScreenPos = Input.mousePosition;
+
+        Vector3 mouseWorldPos = Camera.current.ScreenToWorldPoint(mouseScreenPos);
+
+        mouseWorldPos.z = 0f;
+
+        return mouseWorldPos;
+    }
     
 }
