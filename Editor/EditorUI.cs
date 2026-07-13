@@ -24,7 +24,7 @@ public class EditorUI : MonoBehaviour
 
         removeDefaultCameraMovement();
         setupSwitchButton();
-        //setupEditorButtons();
+        setupEditorButtons();
     }
 
     void removeDefaultCameraMovement()
@@ -58,12 +58,12 @@ public class EditorUI : MonoBehaviour
         if (EditorManager.Instance.isActive)
         {
             mainButtonHolder.SetActive(true);
-            //editorButtons1.SetActive(false);
+            editorButtons1.SetActive(false);
         }
         else
         {
             mainButtonHolder.SetActive(false);
-            //editorButtons1.SetActive(true);
+            editorButtons1.SetActive(true);
         }
         EditorManager.Instance.isActive = !EditorManager.Instance.isActive;
     }
@@ -74,5 +74,65 @@ public class EditorUI : MonoBehaviour
     
         editorButtons1.transform.name = "Editor Buttons";
         editorButtons1.SetActive(false);
+
+        var bagHolder = editorButtons1.transform.GetChild(0).GetChild(2);
+
+        for (int i = 1; i < 7; i++)
+        {
+            Destroy(bagHolder.transform.GetChild(i).gameObject);
+        }
+
+        GameObject baseUIThingFish = bagHolder.transform.GetChild(0).gameObject;
+        Destroy(baseUIThingFish.transform.GetChild(1).gameObject);
+        //Destroy(baseUIThingFish.transform.GetChild(0).GetComponent<Image>());
+
+        Utils.HideAndDisable(baseUIThingFish);
+
+        foreach (var pair in LevelObjectRegistry.EditorPlaceButtonRegistry)
+        {
+            GameObject obj = GameObject.Instantiate(baseUIThingFish, baseUIThingFish.transform.parent);
+            obj.hideFlags = HideFlags.None;
+            obj.SetActive(true);
+
+            pair.Value.Invoke(obj);
+
+            var a = obj.GetComponent<Button>();
+
+            a.onClick = new Button.ButtonClickedEvent();
+            a.onClick.AddListener((System.Action)(() =>
+            {
+                if (EditorToolController.Instance && EditorManager.Instance && !GameManager.Instance.IsStarted)
+                {
+                    if (EditorToolController.Instance.movingObject)
+                    {
+                        EditorToolController.Instance.Cancel();
+                    }
+
+                    GameObject[] objs = LevelObjectRegistry.PlaceDefaultRegistry[pair.Key].Invoke();
+                    EditorManager.Instance.mainSelectedObject = objs[0].GetComponent<BaseLevelObject>();
+                    EditorOutline.addOutline(EditorManager.Instance.mainSelectedObject.gameObject);
+                    EditorToolController.Instance.Pickup();
+
+                    System.Action onDropHandler = null;
+                    onDropHandler = () =>
+                    {
+                        foreach (GameObject obj in objs)
+                        {
+                            obj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+                            obj.transform.localEulerAngles = EditorManager.Instance.mainSelectedObject.transform.localEulerAngles;
+                            obj.transform.localScale = EditorManager.Instance.mainSelectedObject.transform.localScale;
+                        }
+
+                        // unsubscribe after handling
+                        EditorToolController.Instance.onDrop -= onDropHandler;
+                    };
+
+                    EditorToolController.Instance.onDrop += onDropHandler;
+                }
+            }));
+
+        }
+
+
     }
 }
