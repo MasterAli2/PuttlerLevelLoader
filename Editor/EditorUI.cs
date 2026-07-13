@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [MelonLoader.RegisterTypeInIl2Cpp]
 public class EditorUI : MonoBehaviour
 {
-    public static bool inEditor = false;
+    public EditorUI(IntPtr ptr) : base(ptr) {}
 
     public GameObject? editorButtons1;
     public GameObject? mainCanvas;
