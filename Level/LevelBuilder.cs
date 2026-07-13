@@ -54,7 +54,6 @@ public static class LevelBuilder
 
         foreach (SerialLevelObject obj in level.levelObjects)
         {
-            GameObject? newObj = null;
             
             if (!LevelObjectRegistry.Registry.ContainsKey(obj.type))
             {
@@ -62,12 +61,16 @@ public static class LevelBuilder
                 continue;
             }
 
-            newObj = LevelObjectRegistry.Registry[obj.type].Invoke(obj);
+            GameObject[] newObjs = LevelObjectRegistry.Registry[obj.type].Invoke(obj);
 
-            if (newObj != null)
+            foreach (GameObject newObj in newObjs)
             {
-                result.Add(newObj); 
+                if (newObj != null)
+                {
+                    result.Add(newObj); 
+                }
             }
+            
 
 
         }
