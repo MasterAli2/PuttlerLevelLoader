@@ -78,5 +78,13 @@ public static class Utils
 
         return mouseWorldPos;
     }
+
+    public static void disableCollision(Collider2D collider)
+    {
+        collider.excludeLayers = ~0;
+        collider.includeLayers = 0;
+        collider.contactCaptureLayers = 0;
+        collider.callbackLayers = 0;
+    }
     
 }

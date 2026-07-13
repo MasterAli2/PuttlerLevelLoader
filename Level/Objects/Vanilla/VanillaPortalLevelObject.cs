@@ -5,7 +5,7 @@ using Il2Cpp;
 
 [RegisterLevelObject("portal")]
 [MelonLoader.RegisterTypeInIl2Cpp]
-public class VanillaPortalLevelObject : BaseLevelObject, IBaseLevelObject
+public class VanillaPortalLevelObject : LinkedLevelObject, IBaseLevelObject
 {
     public static GameObject prefab;
 
@@ -16,7 +16,33 @@ public class VanillaPortalLevelObject : BaseLevelObject, IBaseLevelObject
         GameObject obj = placePortal(
             Vec3D.fromJson(serialLevelObject.data["entry"]),
             Vec3D.fromJson(serialLevelObject.data["exit"]));
-        obj.AddComponent<VanillaPortalLevelObject>();
+
+        GameObject entryObj = obj.transform.GetChild(0).gameObject;
+        GameObject exitObj = obj.transform.GetChild(1).gameObject;
+        GameObject audio = obj.transform.GetChild(2).gameObject;
+
+        obj.transform.DetachChildren();
+        
+        VanillaPortalLevelObject entry = entryObj.AddComponent<VanillaPortalLevelObject>();
+        VanillaPortalLevelObject exit = exitObj.AddComponent<VanillaPortalLevelObject>();
+
+        entry.links.Add(exit);
+        exit.links.Add(entry);
+        entry.links.Add(audio);
+        exit.links.Add(audio);
+
+        CircleCollider2D entryCollision = entry.gameObject.AddComponent<CircleCollider2D>();
+        entryCollision.isTrigger = true;
+        entryCollision.radius = 0.6f;
+
+        Utils.disableCollision(entryCollision);
+
+        CircleCollider2D exitCollision = exit.gameObject.AddComponent<CircleCollider2D>();
+        exitCollision.isTrigger = true;
+        exitCollision.radius = 0.6f;
+
+        Utils.disableCollision(exitCollision);
+
         return obj;
     }
 
