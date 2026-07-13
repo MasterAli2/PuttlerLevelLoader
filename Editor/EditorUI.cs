@@ -1,3 +1,4 @@
+using Il2Cpp;
 using MelonLoader;
 using puttlerLevelLoader;
 using UnityEngine;
@@ -13,15 +14,25 @@ public class EditorUI : MonoBehaviour
     public GameObject? editorButtons1;
     public GameObject? mainCanvas;
     public GameObject? mainButtonHolder;
+    public GameObject? mainButtonToggle;
     public GameObject? switchButtonObj;
     public void Start()
     {
         mainCanvas = GameObject.Find("Main Canvas");
-        mainButtonHolder = mainCanvas.transform.GetChild(2).GetChild(2).gameObject;
+        mainButtonToggle = mainCanvas.transform.GetChild(2).gameObject;
+        mainButtonHolder = mainButtonToggle.transform.GetChild(2).gameObject;
 
-
+        removeDefaultCameraMovement();
         setupSwitchButton();
         //setupEditorButtons();
+    }
+
+    void removeDefaultCameraMovement()
+    {
+        Camera.main.GetComponent<CameraScroll>().speed = 0f;
+
+        mainButtonToggle.transform.GetChild(0).gameObject.SetActive(false);
+        mainButtonToggle.transform.GetChild(1).gameObject.SetActive(false);
     }
     void setupSwitchButton()
     {
@@ -44,19 +55,17 @@ public class EditorUI : MonoBehaviour
     }
     void toggleEditor()
     {
-        if (inEditor)
+        if (EditorManager.Instance.isActive)
         {
             mainButtonHolder.SetActive(true);
             //editorButtons1.SetActive(false);
-            inEditor = !inEditor;
         }
         else
         {
             mainButtonHolder.SetActive(false);
             //editorButtons1.SetActive(true);
-            inEditor = !inEditor;
-
         }
+        EditorManager.Instance.isActive = !EditorManager.Instance.isActive;
     }
     void setupEditorButtons()
     {

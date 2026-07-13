@@ -7,30 +7,44 @@ class EditorToolController : MonoBehaviour
 {
     public EditorToolController(IntPtr ptr) : base(ptr) {}
 
-    public GameObject? activeHeldGameObject;
+    public bool movingObject = false;
 
     public Vector3 offset;
 
     void Update()
     {
-        if (activeHeldGameObject != null)
+        
+        Move();
+        Rotate();
+    }
+    void Rotate()
+    {
+        if (!movingObject || EditorManager.Instance.mainSelectedObject == null) return;
+
+        float scroll = Input.mouseScrollDelta.y;
+
+        if (Mathf.Abs(scroll) >= 1f)
         {
-            activeHeldGameObject.transform.position = Utils.pointerWorldPos() + offset;
+            EditorManager.Instance.mainSelectedObject.transform.eulerAngles += new Vector3(0f, 0f, 15 * Mathf.Sign(scroll));
+        }
+    }
+
+    void Move()
+    {
+        if (movingObject && EditorManager.Instance.mainSelectedObject != null)
+        {
+            EditorManager.Instance.mainSelectedObject.transform.position = Utils.pointerWorldPos() + offset;
         }
 
-        bool down = Input.GetMouseButtonDown(0);
-        if (down && EditorUI.inEditor)
+        bool down = Input.GetKeyDown(KeyCode.M);
+        if (down && EditorManager.Instance.isActive)
         {
-            MelonLogger.Msg("Down");
-            if (activeHeldGameObject == null)
+            if (!movingObject)
             {
                 Pickup();
-            MelonLogger.Msg("pickup");
-                
             }
-            else {
-            MelonLogger.Msg("drop");
-
+            else 
+            {
                 Drop();
             }
         }
@@ -38,42 +52,13 @@ class EditorToolController : MonoBehaviour
 
     void Pickup()
     {
-        Vector3 mousePos = Utils.pointerWorldPos();
-        mousePos.z = Mathf.Abs(Camera.current.transform.position.z);
-
-
-        Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
-        Collider2D? hit = null;
-        foreach (Collider2D collider in hits)
-        {
-            MelonLogger.Msg($"name: {collider.gameObject.name}");
-
-            if (!collider.transform.root.TryGetComponent<BaseLevelObject>(out var ut)) {
-                MelonLogger.Msg($"nope");
-
-                return;
-            }
-            ut.OnEditorPickup();
-            hit = collider;
-        }
-
-        if (hit == null) {
-            MelonLogger.Msg("null");
-
-            return;
-        }
-
-        activeHeldGameObject = hit.transform.root.gameObject;
-        offset = activeHeldGameObject.transform.position - mousePos;
-        offset.z = 0;
-
+        movingObject = EditorManager.Instance.mainSelectedObject ? true : false;
     }
     void Drop()
     {
-        activeHeldGameObject.transform.root.GetComponent<BaseLevelObject>().OnEditorDrop();
-        activeHeldGameObject = null;
+        if (EditorManager.Instance.mainSelectedObject == null) return;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorDrop();
+        movingObject = false;
     }
-
-
-    
 }
