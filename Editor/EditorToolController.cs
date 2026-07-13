@@ -15,7 +15,7 @@ class EditorToolController : MonoBehaviour
     {
         if (activeHeldGameObject != null)
         {
-            activeHeldGameObject.transform.position = pointerWorldPos() + offset;
+            activeHeldGameObject.transform.position = Utils.pointerWorldPos() + offset;
         }
 
         bool down = Input.GetMouseButtonDown(0);
