@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -16,7 +14,23 @@ public static class LevelObjectRegistry
 
         foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            foreach (Type type in assembly.GetTypes())
+            Type[] types;
+
+            try
+            {
+                types = assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(t => t != null).Cast<Type>().ToArray();
+
+                foreach (Exception? loaderException in ex.LoaderExceptions)
+                {
+                    Debug.LogWarning(loaderException?.ToString());
+                }
+            }
+
+            foreach (Type type in types)
             {
                 var attribute = type.GetCustomAttribute<RegisterLevelObject>();
                 if (attribute == null)
@@ -28,13 +42,19 @@ public static class LevelObjectRegistry
                     continue;
                 }
 
+                if (type.IsAbstract)
+                    continue;
+
                 if (Activator.CreateInstance(type) is not LevelObjectDefinition instance)
                 {
                     Debug.LogError($"Failed to create instance of {type.FullName}.");
                     continue;
                 }
 
-                Registry.Add(attribute.Name, instance);
+                if (!Registry.TryAdd(attribute.Name, instance))
+                {
+                    Debug.LogError($"Duplicate LevelObject name '{attribute.Name}' ({type.FullName}).");
+                }
             }
         }
     }
