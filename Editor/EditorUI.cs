@@ -88,13 +88,13 @@ public class EditorUI : MonoBehaviour
 
         Utils.HideAndDisable(baseUIThingFish);
 
-        foreach (var pair in LevelObjectRegistry.EditorPlaceButtonRegistry)
+        foreach (var pair in LevelObjectRegistry.Registry)
         {
             GameObject obj = GameObject.Instantiate(baseUIThingFish, baseUIThingFish.transform.parent);
             obj.hideFlags = HideFlags.None;
             obj.SetActive(true);
 
-            pair.Value.Invoke(obj);
+            pair.Value.ApplyEditorPlaceButtons(obj);
 
             var a = obj.GetComponent<Button>();
 
@@ -108,7 +108,7 @@ public class EditorUI : MonoBehaviour
                         EditorToolController.Instance.Cancel();
                     }
 
-                    GameObject[] objs = LevelObjectRegistry.PlaceDefaultRegistry[pair.Key].Invoke();
+                    GameObject[] objs = LevelObjectRegistry.Registry[pair.Key].PlaceDefault();
 
                     if (EditorManager.Instance.mainSelectedObject != null)
                         EditorOutline.removeOutline(EditorManager.Instance.mainSelectedObject.gameObject);
