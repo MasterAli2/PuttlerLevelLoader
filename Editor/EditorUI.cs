@@ -109,6 +109,10 @@ public class EditorUI : MonoBehaviour
                     }
 
                     GameObject[] objs = LevelObjectRegistry.PlaceDefaultRegistry[pair.Key].Invoke();
+
+                    if (EditorManager.Instance.mainSelectedObject != null)
+                        EditorOutline.removeOutline(EditorManager.Instance.mainSelectedObject.gameObject);
+
                     EditorManager.Instance.mainSelectedObject = objs[0].GetComponent<BaseLevelObject>();
                     EditorOutline.addOutline(EditorManager.Instance.mainSelectedObject.gameObject);
                     EditorToolController.Instance.Pickup();

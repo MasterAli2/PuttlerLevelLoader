@@ -38,7 +38,7 @@ class EditorCamera : MonoBehaviour
     void Update()
     {
         float scroll = -Input.mouseScrollDelta.y;
-        if (scroll != 0)
+        if (scroll != 0 && EditorToolController.Instance && !EditorToolController.Instance.movingObject)
         {
             var a = cam.ScreenToWorldPoint(Input.mousePosition);
 
