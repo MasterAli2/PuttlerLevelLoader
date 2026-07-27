@@ -30,9 +30,9 @@ public static class LevelBuilder
         GameObject prefabSwitch = GameObject.Find("Switch");
 
 
-        foreach (var pair in LevelObjectRegistry.CleanupRegistry)
+        foreach (var pair in LevelObjectRegistry.Registry)
         {
-            pair.Value.Invoke();
+            pair.Value.CleanScene();
         }
 
         Utils.HideAndDisable(prefabPassageBlock);
@@ -61,7 +61,7 @@ public static class LevelBuilder
                 continue;
             }
 
-            GameObject[] newObjs = LevelObjectRegistry.Registry[obj.type].Invoke(obj);
+            GameObject[] newObjs = LevelObjectRegistry.Registry[obj.type].Place(obj);
 
             foreach (GameObject newObj in newObjs)
             {
@@ -74,6 +74,8 @@ public static class LevelBuilder
 
 
         }
+
+        (new GameObject("fish editor")).AddComponent<EditorManager>();
         return result;
 
 

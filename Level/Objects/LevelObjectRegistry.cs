@@ -3,62 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
+#pragma warning disable CS8618
 
-// this is mostly AI generated but it works so whatever
 public static class LevelObjectRegistry
 {
-    public static Dictionary<string, Func<SerialLevelObject, GameObject[]>> Registry;
-    public static Dictionary<string, Func<GameObject[]>> PlaceDefaultRegistry;
-    public static Dictionary<string, Action> CleanupRegistry;
-    public static Dictionary<string, Action<GameObject>> EditorPlaceButtonRegistry;
+    public static Dictionary<string, LevelObjectDefinition> Registry;
 
     public static void Build()
     {
-        Registry = new Dictionary<string, Func<SerialLevelObject, GameObject[]>>();
-        PlaceDefaultRegistry = new Dictionary<string, Func<GameObject[]>>();
-        CleanupRegistry = new Dictionary<string, Action>();
-        EditorPlaceButtonRegistry = new Dictionary<string, Action<GameObject>>();
+        Registry = new Dictionary<string, LevelObjectDefinition>();
 
-        foreach (var type in Assembly.GetExecutingAssembly().GetTypes()
-            .Where(t =>
-                t.IsClass &&
-                !t.IsAbstract &&
-                typeof(IBaseLevelObject).IsAssignableFrom(t)))
+        foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
         {
-            var attribute = type.GetCustomAttribute<RegisterLevelObject>();
-            if (attribute == null)
-                continue;
+            foreach (Type type in assembly.GetTypes())
+            {
+                var attribute = type.GetCustomAttribute<RegisterLevelObject>();
+                if (attribute == null)
+                    continue;
 
-            var placeMethod = type.GetMethod(
-                nameof(IBaseLevelObject.Place),
-                BindingFlags.Public | BindingFlags.Static);
+                if (!typeof(LevelObjectDefinition).IsAssignableFrom(type))
+                {
+                    Debug.LogError($"{type.FullName} has RegisterLevelObject but does not inherit LevelObjectDefinition.");
+                    continue;
+                }
 
-            var placeDefaultMethod = type.GetMethod(
-                nameof(IBaseLevelObject.PlaceDefault),
-                BindingFlags.Public | BindingFlags.Static);
+                if (Activator.CreateInstance(type) is not LevelObjectDefinition instance)
+                {
+                    Debug.LogError($"Failed to create instance of {type.FullName}.");
+                    continue;
+                }
 
-            var cleanMethod = type.GetMethod(
-                nameof(IBaseLevelObject.CleanScene),
-                BindingFlags.Public | BindingFlags.Static);
-
-            var applyEditorPlaceButtonsMethod = type.GetMethod(
-                nameof(IBaseLevelObject.ApplyEditorPlaceButtons),
-                BindingFlags.Public | BindingFlags.Static);
-
-            Registry[attribute.Name] = serial =>
-                (GameObject[])placeMethod!.Invoke(null, new object[] { serial })!;
-                
-            PlaceDefaultRegistry[attribute.Name] = () =>
-                (GameObject[])placeDefaultMethod!.Invoke(null, null)!;
-
-            CleanupRegistry[attribute.Name] = () =>
-                cleanMethod!.Invoke(null, null);
-
-            EditorPlaceButtonRegistry[attribute.Name] = gameObject =>
-                applyEditorPlaceButtonsMethod?.Invoke(null, new object[] { gameObject });
-            
+                Registry.Add(attribute.Name, instance);
+            }
         }
     }
 }
