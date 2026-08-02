@@ -227,4 +227,11 @@ class EditorToolController : MonoBehaviour
 
         Drop();
     }
+
+    public bool isEditorToolCollider(Collider2D c)
+    {
+        return (c == moveToolBoundsCenter && moveToolBoundsCenter.isActiveAndEnabled) ||
+            (c == moveToolBoundsUp && moveToolBoundsUp.isActiveAndEnabled) ||
+            (c == moveToolBoundsDown && moveToolBoundsDown.isActiveAndEnabled);
+    }
 }

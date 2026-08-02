@@ -63,10 +63,7 @@ public class EditorManager : MonoBehaviour
 
         Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
         var tool = EditorToolController.Instance;
-        if (tool != null && hits.Any(c =>
-            (c == tool.moveToolBoundsCenter && tool.moveToolBoundsCenter.isActiveAndEnabled) ||
-            (c == tool.moveToolBoundsUp && tool.moveToolBoundsUp.isActiveAndEnabled) ||
-            (c == tool.moveToolBoundsDown && tool.moveToolBoundsDown.isActiveAndEnabled)))
+        if (tool != null && hits.Any(tool.isEditorToolCollider))
             return;
         
         bool flag = false;
