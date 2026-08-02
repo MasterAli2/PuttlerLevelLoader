@@ -87,7 +87,7 @@ public class EditorManager : MonoBehaviour
             mainSelectedObject = obj;
             EditorOutline.addOutline(mainSelectedObject.gameObject);
 
-            EditorToolController.Instance.onSelect();
+            EditorToolController.Instance.OnSelect();
             return;
         }
         if (!flag)
@@ -102,7 +102,7 @@ public class EditorManager : MonoBehaviour
         mainSelectedObject.OnEditorUnSelectMain();
         mainSelectedObject = null;
 
-        EditorToolController.Instance.onDeSelect();
+        EditorToolController.Instance.OnDeSelect();
     }
 
     void OnDestroy()

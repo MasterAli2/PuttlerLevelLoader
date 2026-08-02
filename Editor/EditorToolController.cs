@@ -52,7 +52,7 @@ class EditorToolController : MonoBehaviour
         }
         if (mode == 1)
         {
-            onSelect();
+            OnSelect();
         }
     }
 
@@ -75,7 +75,7 @@ class EditorToolController : MonoBehaviour
 
 
     }
-    public void onSelect()
+    public void OnSelect()
     {
         if (mode == 1)
         {
@@ -86,7 +86,7 @@ class EditorToolController : MonoBehaviour
             }
         }
     }
-    public void onDeSelect()
+    public void OnDeSelect()
     {
         moveToolObj.SetActive(false);
         draggingObject = false;
