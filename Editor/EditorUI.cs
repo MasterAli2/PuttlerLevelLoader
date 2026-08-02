@@ -25,6 +25,27 @@ public class EditorUI : MonoBehaviour
         removeDefaultCameraMovement();
         setupSwitchButton();
         setupEditorButtons();
+        doLeftBar();
+    }
+
+    void doLeftBar()
+    {
+        if (BundleManager.leftBarPrefab == null)
+        {
+            return;
+        }
+        GameObject leftBar = GameObject.Instantiate(BundleManager.leftBarPrefab, GameObject.Find("Main Button Toggle ").transform);;
+        
+        leftBar.transform.GetChild(0).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+        leftBar.transform.GetChild(0).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(1);}));
+        
+        leftBar.transform.GetChild(1).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+        leftBar.transform.GetChild(1).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(2);}));
+        
+        leftBar.transform.GetChild(2).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+        leftBar.transform.GetChild(2).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(3);}));
+
+        MelonLogger.Msg(leftBar.transform.GetChild(0).GetComponent<Button>().name);
     }
 
     void removeDefaultCameraMovement()
