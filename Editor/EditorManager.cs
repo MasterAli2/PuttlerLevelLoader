@@ -42,6 +42,8 @@ public class EditorManager : MonoBehaviour
         gameObject.AddComponent<EditorToolController>();
         gameObject.AddComponent<EditorCamera>();
 
+        
+
     }
     
     void Update()
@@ -49,10 +51,7 @@ public class EditorManager : MonoBehaviour
         bool down = Input.GetMouseButtonDown(0);
         if (down && EditorManager.Instance.isActive)
         {
-            if (mainSelectedObject != null)
-            {
-                UnSelect();    
-            }
+
             Select();
         }
     }
@@ -63,26 +62,50 @@ public class EditorManager : MonoBehaviour
         mousePos.z = Mathf.Abs(Camera.current.transform.position.z);
 
         Collider2D[] hits = Physics2D.OverlapPointAll(mousePos);
+        var tool = EditorToolController.Instance;
+        if (tool != null && hits.Any(c =>
+            (c == tool.moveToolBoundsCenter && tool.moveToolBoundsCenter.isActiveAndEnabled) ||
+            (c == tool.moveToolBoundsUp && tool.moveToolBoundsUp.isActiveAndEnabled) ||
+            (c == tool.moveToolBoundsDown && tool.moveToolBoundsDown.isActiveAndEnabled)))
+            return;
+        
+        bool flag = false;
         foreach (Collider2D collider in hits)
         {
             if (!collider.transform.root.TryGetComponent<BaseLevelObject>(out var obj)) 
             {
                 continue;
             }
+            if (mainSelectedObject == obj)
+            {
+                flag = true;
+                continue;
+            }
+
+            UnSelect();    
+            
 
             obj.OnEditorSelectMain();
 
             mainSelectedObject = obj;
             EditorOutline.addOutline(mainSelectedObject.gameObject);
-            break;
+
+            EditorToolController.Instance.onSelect();
+            return;
         }
+        if (!flag)
+            UnSelect();   
     }
 
     private void UnSelect()
     {
+        if (mainSelectedObject == null)
+            return;
         EditorOutline.removeOutline(mainSelectedObject.gameObject);
         mainSelectedObject.OnEditorUnSelectMain();
         mainSelectedObject = null;
+
+        EditorToolController.Instance.onDeSelect();
     }
 
     void OnDestroy()
