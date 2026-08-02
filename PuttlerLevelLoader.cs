@@ -1,6 +1,7 @@
 ﻿namespace puttlerLevelLoader;
 
 using MelonLoader;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
@@ -9,6 +10,8 @@ public class PuttlerLevelLoader : MelonMod
 
     public override void OnInitializeMelon()
     {
+        Physics2D.autoSyncTransforms = true;
+
         LevelObjectRegistry.Build();
         BundleManager.init();
         LocalData.init();
