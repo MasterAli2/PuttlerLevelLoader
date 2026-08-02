@@ -76,7 +76,15 @@ public static class Utils
     {
         Vector3 mouseScreenPos = Input.mousePosition;
 
-        Vector3 mouseWorldPos = Camera.current.ScreenToWorldPoint(mouseScreenPos);
+        Camera camera = Camera.main;
+        if (camera == null)
+        {
+            camera = Camera.current;
+        }
+
+
+
+        Vector3 mouseWorldPos = camera.ScreenToWorldPoint(mouseScreenPos);
 
         mouseWorldPos.z = 0f;
 
