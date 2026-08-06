@@ -39,23 +39,23 @@ public static class BundleManager
     {
         get
         {
-            if (_bundle == null)
-            {
-                return null;
-            }
-            return _bundle.LoadAsset<GameObject>("Assets/MoveTool.prefab");
+            return getGameobjectFromMainBundleOrNull("Assets/MoveTool.prefab");
         }
     }
     public static GameObject? rotateToolPrefab
     {
         get
         {
-            if (_bundle == null)
-            {
-                return null;
-            }
-            return _bundle.LoadAsset<GameObject>("Assets/RotateTool.prefab");
+            return getGameobjectFromMainBundleOrNull("Assets/RotateTool.prefab");
         }
+    }
+    private static GameObject? getGameobjectFromMainBundleOrNull(string name)
+    {
+        if (_bundle == null)
+        {
+            return null;
+        }
+        return _bundle.LoadAsset<GameObject>(name);
     }
 
     public static void init()
