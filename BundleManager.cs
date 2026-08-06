@@ -28,25 +28,21 @@ public static class BundleManager
     {
         get
         {
-            if (_bundle == null)
-            {
-                return null;
-            }
-            return _bundle.LoadAsset<GameObject>("Assets/LeftBar.prefab");
+            return getGameobjectFromMainBundleOrNull("LeftBar");
         }
     }
     public static GameObject? moveToolPrefab
     {
         get
         {
-            return getGameobjectFromMainBundleOrNull("Assets/MoveTool.prefab");
+            return getGameobjectFromMainBundleOrNull("MoveTool");
         }
     }
     public static GameObject? rotateToolPrefab
     {
         get
         {
-            return getGameobjectFromMainBundleOrNull("Assets/RotateTool.prefab");
+            return getGameobjectFromMainBundleOrNull("RotateTool");
         }
     }
     private static GameObject? getGameobjectFromMainBundleOrNull(string name)
@@ -55,7 +51,7 @@ public static class BundleManager
         {
             return null;
         }
-        return _bundle.LoadAsset<GameObject>(name);
+        return _bundle.LoadAsset<GameObject>("Assets/" + name + ".prefab");
     }
 
     public static void init()
