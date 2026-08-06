@@ -57,14 +57,8 @@ class EditorToolController : MonoBehaviour
     {
         this.mode = mode;
 
-        if (mode != 1)
-        {
-            moveToolObj.SetActive(false);
-        }
-        if (mode == 1)
-        {
-            OnSelect();
-        }
+        OnDeSelect();
+        OnSelect();
     }
 
     void Start()
