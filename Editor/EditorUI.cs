@@ -134,7 +134,7 @@ public class EditorUI : MonoBehaviour
             {
                 if (EditorToolController.Instance && EditorManager.Instance && !GameManager.Instance.IsStarted)
                 {
-                    if (EditorToolController.Instance.draggingObject)
+                    if (EditorToolController.Instance.movingObject)
                     {
                         EditorToolController.Instance.Cancel();
                     }

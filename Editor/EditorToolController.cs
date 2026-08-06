@@ -22,8 +22,8 @@ class EditorToolController : MonoBehaviour
     public int mode = 0;
 
     // Move
-    public bool draggingObject;
-    public ToolDirection dragState = ToolDirection.All;
+    public bool movingObject;
+    public ToolDirection moveDirection = ToolDirection.All;
     public enum ToolDirection
     {
         All = 0,
@@ -41,7 +41,7 @@ class EditorToolController : MonoBehaviour
     public Vector2 startMoveToolPos = Vector2.zero;
 
     // Rotate
-    public bool rotatingObj = false;
+    public bool rotatingObject = false;
     public GameObject rotateToolObj;
     public CircleCollider2D rotateToolButton;
     public Transform rotateToolPivot;
@@ -109,10 +109,10 @@ class EditorToolController : MonoBehaviour
     public void OnDeSelect()
     {
         moveToolObj.SetActive(false);
-        draggingObject = false;
+        movingObject = false;
 
         rotateToolObj.SetActive(false);
-        rotatingObj = false;
+        rotatingObject = false;
     }
     void Update()
     {
@@ -125,7 +125,7 @@ class EditorToolController : MonoBehaviour
     {
         Vector3 mousePos = (Vector2)Utils.pointerWorldPos();
 
-        if (rotatingObj && EditorManager.Instance.mainSelectedObject != null)
+        if (rotatingObject && EditorManager.Instance.mainSelectedObject != null)
         {
 
             //rotateToolPivot.LookAt(mousePos);
@@ -161,29 +161,29 @@ class EditorToolController : MonoBehaviour
 
         startRot = EditorManager.Instance.mainSelectedObject.transform.eulerAngles;
 
-        rotatingObj = true;
+        rotatingObject = true;
     }
     private void StopRotate()
     {
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
-        rotatingObj = false;
+        rotatingObject = false;
     }
 
     void Move()
     {
         Vector2 mousePos = (Vector2)Utils.pointerWorldPos();
 
-        if (draggingObject && EditorManager.Instance.mainSelectedObject != null)
+        if (movingObject && EditorManager.Instance.mainSelectedObject != null)
         {
             // compute tool position from mouse and offsets, then constrain by dragState
             Vector2 toolPos = mousePos + moveToolOffset;
 
-            if (dragState == ToolDirection.Up)
+            if (moveDirection == ToolDirection.Up)
             {
                 toolPos.x = startMoveToolPos.x;
             }
-            else if (dragState == ToolDirection.Right)
+            else if (moveDirection == ToolDirection.Right)
             {
                 toolPos.y = startMoveToolPos.y;
             }
@@ -192,11 +192,11 @@ class EditorToolController : MonoBehaviour
 
             Vector3 desiredObjPos = (Vector3)(toolPos + moveObjOffset);
 
-            if (dragState == ToolDirection.Up)
+            if (moveDirection == ToolDirection.Up)
             {
                 desiredObjPos.x = startPos.x;
             }
-            else if (dragState == ToolDirection.Right)
+            else if (moveDirection == ToolDirection.Right)
             {
                 desiredObjPos.y = startPos.y;
             }
@@ -235,7 +235,7 @@ class EditorToolController : MonoBehaviour
         if (down && isOverlapping && EditorManager.Instance.isActive && !GameManager.Instance.IsStarted)
         {
             if (detectedDragState != null)
-                dragState = detectedDragState.Value;
+                moveDirection = detectedDragState.Value;
 
             Vector2 toolPos = (Vector2)moveToolObj.transform.position;
 
@@ -262,7 +262,7 @@ class EditorToolController : MonoBehaviour
         if (moveToolObj != null)
             startMoveToolPos = (Vector2)moveToolObj.transform.position;
 
-        draggingObject = true;
+        movingObject = true;
     }
     private void StopMove()
     {
@@ -276,7 +276,6 @@ class EditorToolController : MonoBehaviour
 
     public void Cancel()
     {
-        if (!draggingObject || EditorManager.Instance.mainSelectedObject == null) return;
 
         //EditorManager.Instance.mainSelectedObject.transform.position = startPos;
         //EditorManager.Instance.mainSelectedObject.transform.eulerAngles = startRot;
