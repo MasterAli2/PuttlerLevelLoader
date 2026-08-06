@@ -23,8 +23,8 @@ class EditorToolController : MonoBehaviour
 
     // Move
     public bool draggingObject;
-    public DragState dragState = DragState.All;
-    public enum DragState
+    public ToolDirection dragState = ToolDirection.All;
+    public enum ToolDirection
     {
         All = 0,
         Up = 1,
@@ -179,11 +179,11 @@ class EditorToolController : MonoBehaviour
             // compute tool position from mouse and offsets, then constrain by dragState
             Vector2 toolPos = mousePos + moveToolOffset;
 
-            if (dragState == DragState.Up)
+            if (dragState == ToolDirection.Up)
             {
                 toolPos.x = startMoveToolPos.x;
             }
-            else if (dragState == DragState.Right)
+            else if (dragState == ToolDirection.Right)
             {
                 toolPos.y = startMoveToolPos.y;
             }
@@ -192,11 +192,11 @@ class EditorToolController : MonoBehaviour
 
             Vector3 desiredObjPos = (Vector3)(toolPos + moveObjOffset);
 
-            if (dragState == DragState.Up)
+            if (dragState == ToolDirection.Up)
             {
                 desiredObjPos.x = startPos.x;
             }
-            else if (dragState == DragState.Right)
+            else if (dragState == ToolDirection.Right)
             {
                 desiredObjPos.y = startPos.y;
             }
@@ -204,7 +204,7 @@ class EditorToolController : MonoBehaviour
             EditorManager.Instance.mainSelectedObject.transform.position = desiredObjPos;
         }
 
-        DragState? detectedDragState = null;
+        ToolDirection? detectedDragState = null;
         var overlaps = Physics2D.OverlapPointAll(mousePos);
         if (overlaps != null)
         {
@@ -212,17 +212,17 @@ class EditorToolController : MonoBehaviour
             {
                 if (col == moveToolBoundsCenter)
                 {
-                    detectedDragState = DragState.All;
+                    detectedDragState = ToolDirection.All;
                     break;
                 }
                 if (col == moveToolBoundsUp)
                 {
-                    detectedDragState = DragState.Up;
+                    detectedDragState = ToolDirection.Up;
                     break;
                 }
                 if (col == moveToolBoundsDown)
                 {
-                    detectedDragState = DragState.Right;
+                    detectedDragState = ToolDirection.Right;
                     break;
                 }
             }
