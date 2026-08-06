@@ -269,13 +269,14 @@ class EditorToolController : MonoBehaviour
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
         EditorManager.Instance.mainSelectedObject.OnEditorDrop();
-        draggingObject = false;
+        movingObject = false;
 
         onDrop?.Invoke();
     }
 
     public void Cancel()
     {
+        if (!movingObject || EditorManager.Instance.mainSelectedObject == null) return;
 
         //EditorManager.Instance.mainSelectedObject.transform.position = startPos;
         //EditorManager.Instance.mainSelectedObject.transform.eulerAngles = startRot;
