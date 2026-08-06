@@ -2,6 +2,7 @@ using Harmony;
 using MelonLoader;
 using MelonLoader.TinyJSON;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
@@ -58,6 +59,9 @@ public class EditorManager : MonoBehaviour
 
     void Select()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         Vector3 mousePos = Utils.pointerWorldPos();
         mousePos.z = Mathf.Abs(Camera.current.transform.position.z);
 
