@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 using Il2Cpp;
 using MelonLoader;
@@ -11,6 +10,7 @@ class EditorToolController : MonoBehaviour
 
     public EditorToolController(IntPtr ptr) : base(ptr) {}
 
+    // temp fix
     public event Action onDrop;
 
     public Vector3 startPos;
@@ -35,6 +35,17 @@ class EditorToolController : MonoBehaviour
     public BoxCollider2D moveToolBoundsCenter;
     public BoxCollider2D moveToolBoundsUp;
     public BoxCollider2D moveToolBoundsDown;
+
+    public Vector2 moveObjOffset = Vector2.zero;
+    public Vector2 moveToolOffset = Vector2.zero;
+    public Vector2 startMoveToolPos = Vector2.zero;
+
+    // Rotate
+    public bool rotatingObj = false;
+    public GameObject rotateToolObj;
+    public CircleCollider2D rotateToolButton;
+    public Transform rotateToolPivot;
+
     void Awake()
     {
         if (Instance == null)
@@ -73,46 +84,97 @@ class EditorToolController : MonoBehaviour
             moveToolBoundsDown = moveToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
         }
 
+        if (BundleManager.rotateToolPrefab != null)
+        {
+            rotateToolObj = GameObject.Instantiate(BundleManager.rotateToolPrefab);
+            rotateToolObj.SetActive(false);
+
+            rotateToolPivot = rotateToolObj.transform.GetChild(0);    
+            rotateToolButton = rotateToolObj.transform.GetChild(0).GetChild(0).GetComponent<CircleCollider2D>();    
+        }
+
 
     }
     public void OnSelect()
     {
+        if (EditorManager.Instance.mainSelectedObject == null)
+            return;
+
         if (mode == 1)
         {
-            if (EditorManager.Instance.mainSelectedObject != null)
-            {
-                moveToolObj.SetActive(true);
-                moveToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
-            }
+            moveToolObj.SetActive(true);
+            moveToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+        }
+        else if (mode == 2)
+        {
+            rotateToolObj.SetActive(true);
+            rotateToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+            rotateToolPivot.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
         }
     }
     public void OnDeSelect()
     {
         moveToolObj.SetActive(false);
         draggingObject = false;
+
+        rotateToolObj.SetActive(false);
+        rotatingObj = false;
     }
     void Update()
     {
         
         Move();
-        //Rotate();
+        Rotate();
     }
 
     void Rotate()
     {
-        if (!draggingObject || EditorManager.Instance.mainSelectedObject == null) return;
+        Vector3 mousePos = (Vector2)Utils.pointerWorldPos();
 
-        float scroll = Input.mouseScrollDelta.y;
-
-        if (Mathf.Abs(scroll) >= 1f)
+        if (rotatingObj && EditorManager.Instance.mainSelectedObject != null)
         {
-            EditorManager.Instance.mainSelectedObject.transform.eulerAngles += new Vector3(0f, 0f, 15 * Mathf.Sign(scroll));
-        }
-    }
 
-    public Vector2 moveObjOffset = Vector2.zero;
-    public Vector2 moveToolOffset = Vector2.zero;
-    public Vector2 startToolPos = Vector2.zero;
+            //rotateToolPivot.LookAt(mousePos);
+
+            
+            Vector2 direction = mousePos - rotateToolPivot.position;
+            
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            
+            rotateToolPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            EditorManager.Instance.mainSelectedObject.transform.rotation = rotateToolPivot.rotation;
+        }
+
+        bool isOverlapping = Physics2D.OverlapPointAll(mousePos).Contains(rotateToolButton);
+
+        bool down = Input.GetMouseButtonDown(0);
+
+        if (down && isOverlapping && EditorManager.Instance.isActive && !GameManager.Instance.IsStarted)
+        {
+            StartRotate();
+        }
+
+        bool up = Input.GetMouseButtonUp(0);
+        if (up)
+        {
+            StopRotate();
+        }
+
+    }
+    private void StartRotate()
+    {
+        if (EditorManager.Instance.mainSelectedObject == null) return;
+
+        startRot = EditorManager.Instance.mainSelectedObject.transform.eulerAngles;
+
+        rotatingObj = true;
+    }
+    private void StopRotate()
+    {
+        if (EditorManager.Instance.mainSelectedObject == null) return;
+
+        rotatingObj = false;
+    }
 
     void Move()
     {
@@ -125,11 +187,11 @@ class EditorToolController : MonoBehaviour
 
             if (dragState == DragState.Up)
             {
-                toolPos.x = startToolPos.x;
+                toolPos.x = startMoveToolPos.x;
             }
             else if (dragState == DragState.Right)
             {
-                toolPos.y = startToolPos.y;
+                toolPos.y = startMoveToolPos.y;
             }
 
             moveToolObj.transform.position = toolPos;
@@ -185,18 +247,18 @@ class EditorToolController : MonoBehaviour
 
             moveObjOffset = (Vector2)EditorManager.Instance.mainSelectedObject.transform.position - toolPos;
             moveToolOffset = toolPos - mousePos;
-            Pickup();
+            StartMove();
         }
 
         bool up = Input.GetMouseButtonUp(0);
         if (up)
         {
-            Drop();
+            StopMove();
         }
 
     }
 
-    public void Pickup()
+    public void StartMove()
     {
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
@@ -204,11 +266,11 @@ class EditorToolController : MonoBehaviour
         startRot = EditorManager.Instance.mainSelectedObject.transform.eulerAngles;
 
         if (moveToolObj != null)
-            startToolPos = (Vector2)moveToolObj.transform.position;
+            startMoveToolPos = (Vector2)moveToolObj.transform.position;
 
         draggingObject = true;
     }
-    void Drop()
+    private void StopMove()
     {
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
@@ -225,13 +287,14 @@ class EditorToolController : MonoBehaviour
         //EditorManager.Instance.mainSelectedObject.transform.position = startPos;
         //EditorManager.Instance.mainSelectedObject.transform.eulerAngles = startRot;
 
-        Drop();
+        StopMove();
     }
 
     public bool isEditorToolCollider(Collider2D c)
     {
         return (c == moveToolBoundsCenter && moveToolBoundsCenter.isActiveAndEnabled) ||
             (c == moveToolBoundsUp && moveToolBoundsUp.isActiveAndEnabled) ||
-            (c == moveToolBoundsDown && moveToolBoundsDown.isActiveAndEnabled);
+            (c == moveToolBoundsDown && moveToolBoundsDown.isActiveAndEnabled) ||
+            (c == rotateToolButton && rotateToolButton.isActiveAndEnabled);
     }
 }

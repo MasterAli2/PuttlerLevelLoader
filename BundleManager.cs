@@ -46,6 +46,17 @@ public static class BundleManager
             return _bundle.LoadAsset<GameObject>("Assets/MoveTool.prefab");
         }
     }
+    public static GameObject? rotateToolPrefab
+    {
+        get
+        {
+            if (_bundle == null)
+            {
+                return null;
+            }
+            return _bundle.LoadAsset<GameObject>("Assets/RotateTool.prefab");
+        }
+    }
 
     public static void init()
     {

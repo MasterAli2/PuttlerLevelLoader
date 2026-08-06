@@ -136,7 +136,7 @@ public class EditorUI : MonoBehaviour
 
                     EditorManager.Instance.mainSelectedObject = objs[0].GetComponent<BaseLevelObject>();
                     EditorOutline.addOutline(EditorManager.Instance.mainSelectedObject.gameObject);
-                    EditorToolController.Instance.Pickup();
+                    EditorToolController.Instance.StartMove();
 
                     System.Action onDropHandler = null;
                     onDropHandler = () =>
