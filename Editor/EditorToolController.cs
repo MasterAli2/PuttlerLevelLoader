@@ -91,7 +91,7 @@ class EditorToolController : MonoBehaviour
     }
     public void OnSelect()
     {
-        if (EditorManager.Instance.mainSelectedObject == null)
+        if (!EditorManager.Instance.isActive ||EditorManager.Instance.mainSelectedObject == null)
             return;
 
         if (mode == 1)

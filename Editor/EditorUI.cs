@@ -74,6 +74,8 @@ public class EditorUI : MonoBehaviour
         switchButton.onClick.AddListener((System.Action)(() => {toggleEditor();}));
 
     }
+
+    // TODO: move this to EditorManager
     void toggleEditor()
     {
         if (EditorManager.Instance.isActive)
@@ -87,6 +89,14 @@ public class EditorUI : MonoBehaviour
             editorButtons1.SetActive(true);
         }
         EditorManager.Instance.isActive = !EditorManager.Instance.isActive;
+        if (EditorManager.Instance.isActive)
+        {
+            EditorToolController.Instance.OnSelect();
+        }
+        else
+        {
+            EditorToolController.Instance.OnDeSelect();
+        }
     }
     void setupEditorButtons()
     {
