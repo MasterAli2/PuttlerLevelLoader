@@ -169,5 +169,16 @@ public static class Utils
 
 
     }
+
+    public static Vector2 snapToGridVector(Vector2 vector, float grid)
+    {
+        return new Vector2(Mathf.Round(vector.x / grid) * grid, Mathf.Round(vector.y / grid) * grid);
+    }
+
+    public static float snapToGridValue(float value, float grid)
+    {
+        if (grid == 0f) return value;
+        return Mathf.Round(value / grid) * grid;
+    }
     
 }

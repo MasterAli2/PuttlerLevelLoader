@@ -14,9 +14,9 @@ class EditorToolController : MonoBehaviour
     // temp fix
     public event Action onDrop;
 
-    public float moveGridsize = 0.2f;
-    public float rotateGridsize = 18f;
-    public float scaleGridsize = 0.2f;
+    public float moveGridsize = 0.1f;
+    public float rotateGridsize = 9f;
+    public float scaleGridsize = 0.1f;
     public bool gridActive = true;
 
     public Vector3 startPos;
@@ -177,6 +177,7 @@ class EditorToolController : MonoBehaviour
             Vector2 direction = mousePos - rotateToolPivot.position;
             
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            angle = Utils.snapToGridValue(angle, rotateGridsize);
             
             rotateToolPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             EditorManager.Instance.mainSelectedObject.transform.rotation = rotateToolPivot.rotation;
@@ -232,7 +233,6 @@ class EditorToolController : MonoBehaviour
                 toolPos.y = startMoveToolPos.y;
             }
 
-            moveToolObj.transform.position = toolPos;
 
             Vector3 desiredObjPos = (Vector3)(toolPos + moveObjOffset);
 
@@ -245,6 +245,11 @@ class EditorToolController : MonoBehaviour
                 desiredObjPos.y = startPos.y;
             }
 
+            // Apply grid
+            toolPos = Utils.snapToGridVector(toolPos, moveGridsize);
+            desiredObjPos = Utils.snapToGridVector(desiredObjPos, moveGridsize);
+
+            moveToolObj.transform.position = toolPos;
             EditorManager.Instance.mainSelectedObject.transform.position = desiredObjPos;
         }
 
@@ -327,6 +332,7 @@ class EditorToolController : MonoBehaviour
             Transform mainSelectedObject = EditorManager.Instance.mainSelectedObject.transform;
 
             Vector2 mousePosDifference = mousePos - startMousePos;
+            mousePosDifference = Utils.snapToGridVector(mousePosDifference, scaleGridsize);
 
             bool all = scaleDirection == ToolDirection.All;
             if (all)
