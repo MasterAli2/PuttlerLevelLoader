@@ -29,15 +29,28 @@ class EditorOutline : MonoBehaviour
             newSpriteRenderer.color = Color.yellow;
             newSpriteRenderer.sortingOrder = spriteRenderer.sortingOrder-1;
 
-            var scale = outline.transform.localScale;
-            var parentScale = outline.transform.parent.localScale;
-
-            scale.x += outlineWidth * 2f / parentScale.x;
-            scale.y += outlineWidth * 2f / parentScale.y;
-            outline.transform.localScale = scale;
+            ApplyOutlineScale(outline.transform);
 
             outlineRenderers.Add(newSpriteRenderer);
         }
+    }
+
+    void FixedUpdate()
+    {
+        foreach (SpriteRenderer spriteRenderer in outlineRenderers)
+        {
+            ApplyOutlineScale(spriteRenderer.transform);
+        }
+    }
+
+    void ApplyOutlineScale(Transform outlineTransform)
+    {
+        var parentScale = outlineTransform.parent.localScale;
+        var scale = Vector3.one;
+
+        scale.x += outlineWidth * 2f / parentScale.x;
+        scale.y += outlineWidth * 2f / parentScale.y;
+        outlineTransform.localScale = scale;
     }
 
     void OnDestroy(){
