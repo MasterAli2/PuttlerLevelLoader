@@ -45,6 +45,13 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("RotateTool");
         }
     }
+    public static GameObject? scaleToolPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("ScaleTool");
+        }
+    }
     private static GameObject? getGameobjectFromMainBundleOrNull(string name)
     {
         if (_bundle == null)
