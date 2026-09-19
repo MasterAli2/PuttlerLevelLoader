@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 public class EditorUI : MonoBehaviour
 {
     public EditorUI(IntPtr ptr) : base(ptr) {}

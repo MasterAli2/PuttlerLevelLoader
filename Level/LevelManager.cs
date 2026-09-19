@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.PlayerLoop;
 using UnityEngine.SceneManagement;
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 public class LevelManager : MonoBehaviour
 {
     public LevelManager(IntPtr ptr) : base(ptr) {}

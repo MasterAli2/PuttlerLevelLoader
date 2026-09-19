@@ -4,7 +4,6 @@ using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 class EditorToolController : MonoBehaviour
 {
     public static EditorToolController Instance {get; private set;}

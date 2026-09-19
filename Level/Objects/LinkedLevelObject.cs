@@ -2,7 +2,6 @@
 using UnityEngine;
 
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 public abstract class LinkedLevelObject : BaseLevelObject
 {
     public List<UnityEngine.Object> links = new List<UnityEngine.Object>();

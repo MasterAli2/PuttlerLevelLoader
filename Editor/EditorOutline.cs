@@ -1,7 +1,6 @@
 using MelonLoader;
 using UnityEngine;
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 class EditorOutline : MonoBehaviour
 {
     const float outlineWidth = 0.05f;

@@ -2,7 +2,6 @@ using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
 
-[MelonLoader.RegisterTypeInIl2Cpp]
 class EditorCamera : MonoBehaviour
 {
     public EditorCamera(IntPtr ptr) : base(ptr) {}

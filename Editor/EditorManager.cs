@@ -18,7 +18,6 @@ right drag for camera move
 unselected scroll for camera zoom
 
 */
-[MelonLoader.RegisterTypeInIl2Cpp]
 public class EditorManager : MonoBehaviour
 {
     public static EditorManager Instance {get; private set;}
