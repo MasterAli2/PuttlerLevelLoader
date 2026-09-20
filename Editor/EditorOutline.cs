@@ -36,8 +36,20 @@ class EditorOutline : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (this == null)
+        {
+            return;
+        }
+
         foreach (SpriteRenderer spriteRenderer in outlineRenderers)
         {
+
+            // bandaid fix
+            if (spriteRenderer == null)
+            {
+                continue;
+            }
+
             ApplyOutlineScale(spriteRenderer.transform);
         }
     }
