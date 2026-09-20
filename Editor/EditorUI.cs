@@ -133,35 +133,9 @@ public class EditorUI : MonoBehaviour
             {
                 if (EditorToolController.Instance && EditorManager.Instance && !GameManager.Instance.IsStarted)
                 {
-                    if (EditorToolController.Instance.movingObject)
-                    {
-                        EditorToolController.Instance.Cancel();
-                    }
 
-                    GameObject[] objs = LevelObjectRegistry.Registry[pair.Key].PlaceDefault();
-
-                    if (EditorManager.Instance.mainSelectedObject != null)
-                        EditorOutline.removeOutline(EditorManager.Instance.mainSelectedObject.gameObject);
-
-                    EditorManager.Instance.mainSelectedObject = objs[0].GetComponent<BaseLevelObject>();
-                    EditorOutline.addOutline(EditorManager.Instance.mainSelectedObject.gameObject);
-                    EditorToolController.Instance.StartMove();
-
-                    System.Action onDropHandler = null;
-                    onDropHandler = () =>
-                    {
-                        foreach (GameObject obj in objs)
-                        {
-                            obj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
-                            obj.transform.localEulerAngles = EditorManager.Instance.mainSelectedObject.transform.localEulerAngles;
-                            obj.transform.localScale = EditorManager.Instance.mainSelectedObject.transform.localScale;
-                        }
-
-                        // unsubscribe after handling
-                        EditorToolController.Instance.onDrop -= onDropHandler;
-                    };
-
-                    EditorToolController.Instance.onDrop += onDropHandler;
+                    EditorPlacer.Instance.Place(LevelObjectRegistry.Registry[pair.Key]);
+    
                 }
             }));
 

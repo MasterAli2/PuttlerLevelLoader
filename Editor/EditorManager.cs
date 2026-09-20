@@ -25,6 +25,8 @@ public class EditorManager : MonoBehaviour
     public bool inEditor = false;
     public bool isActive = false;
 
+    public float selectCoolDown = 0f;
+
 
     // Called main to allow selecting multiple objects in the future
     public BaseLevelObject? mainSelectedObject;
@@ -41,23 +43,23 @@ public class EditorManager : MonoBehaviour
         gameObject.AddComponent<EditorUI>();
         gameObject.AddComponent<EditorToolController>();
         gameObject.AddComponent<EditorCamera>();
-
-        
-
+        gameObject.AddComponent<EditorPlacer>();
     }
     
     void Update()
     {
-        bool down = Input.GetMouseButtonDown(0);
-        if (down && EditorManager.Instance.isActive)
-        {
+        selectCoolDown = Mathf.Max(selectCoolDown - Time.deltaTime, -1f);
 
+        bool down = Input.GetMouseButtonDown(0);
+        if (down && EditorManager.Instance.isActive && selectCoolDown <= 0f && !EditorPlacer.Instance.isPlacing)
+        {
             Select();
         }
     }
 
     void Select()
     {
+
         if (EventSystem.current.IsPointerOverGameObject())
             return;
 
@@ -84,20 +86,25 @@ public class EditorManager : MonoBehaviour
 
             UnSelect();    
             
-
-            obj.OnEditorSelectMain();
-
-            mainSelectedObject = obj;
-            EditorOutline.addOutline(mainSelectedObject.gameObject);
-
-            EditorToolController.Instance.OnSelect();
+            SelectObj(obj);
+            
             return;
         }
         if (!flag)
             UnSelect();   
     }
 
-    private void UnSelect()
+    public void SelectObj(BaseLevelObject levelObject)
+    {
+        levelObject.OnEditorSelectMain();
+
+        mainSelectedObject = levelObject;
+        EditorOutline.addOutline(mainSelectedObject.gameObject);
+
+        EditorToolController.Instance.OnSelect();
+    }
+
+    public void UnSelect()
     {
         if (mainSelectedObject == null)
             return;
