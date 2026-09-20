@@ -44,6 +44,7 @@ public class EditorManager : MonoBehaviour
         gameObject.AddComponent<EditorToolController>();
         gameObject.AddComponent<EditorCamera>();
         gameObject.AddComponent<EditorPlacer>();
+        gameObject.AddComponent<EditorOutline>();
     }
     
     void Update()
@@ -108,7 +109,7 @@ public class EditorManager : MonoBehaviour
     {
         if (mainSelectedObject == null)
             return;
-        EditorOutline.removeOutline(mainSelectedObject.gameObject);
+        EditorOutline.clearOutline();
         mainSelectedObject.OnEditorUnSelectMain();
         mainSelectedObject = null;
 

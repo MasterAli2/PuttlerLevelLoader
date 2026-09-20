@@ -7,11 +7,26 @@ class EditorOutline : MonoBehaviour
 
     public List<SpriteRenderer> outlineRenderers = new List<SpriteRenderer>();
 
+    public Transform target;
+    public static EditorOutline Instance;
+
     public EditorOutline(IntPtr ptr) : base(ptr) {}
-    
+
     void Awake()
     {
-        SpriteRenderer[] spriteRenderers = transform.parent.GetComponentsInChildren<SpriteRenderer>().ToArray();
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+    }
+    
+    void Refresh()
+    {
+        Clear();
+
+        outlineRenderers = new List<SpriteRenderer>();
+
+        SpriteRenderer[] spriteRenderers = target.GetComponentsInChildren<SpriteRenderer>().ToArray();
 
         foreach (SpriteRenderer spriteRenderer in spriteRenderers)
         {
@@ -64,7 +79,7 @@ class EditorOutline : MonoBehaviour
         outlineTransform.localScale = scale;
     }
 
-    void OnDestroy(){
+    void Clear(){
         foreach (SpriteRenderer spriteRenderer in outlineRenderers){
             if (spriteRenderer == null) 
                 continue;
@@ -80,40 +95,16 @@ class EditorOutline : MonoBehaviour
             return;
         }
 
-        removeOutline(gameObject);
+        clearOutline();
 
-        GameObject outline = new GameObject("Editor Outline");
-        outline.transform.SetParent(gameObject.transform, false);
-        outline.AddComponent<EditorOutline>();
+        EditorOutline.Instance.target = gameObject.transform;
+        EditorOutline.Instance.Refresh();
     }
 
-    public static void removeOutline(GameObject gameObject)
+    public static void clearOutline()
     {
-        if (gameObject == null)
-        {
-            return;
-        }
+        EditorOutline.Instance.Clear();
 
-        EditorOutline[] outlines = gameObject.GetComponentsInChildren<EditorOutline>().ToArray();
-        foreach (EditorOutline outline in outlines)
-        {
-            if (outline == null)
-            {
-                continue;
-            }
 
-            foreach (SpriteRenderer spriteRenderer in outline.outlineRenderers)
-            {
-                if (spriteRenderer != null)
-                {
-                    Destroy(spriteRenderer.gameObject);
-                }
-            }
-
-            if (outline.gameObject != null)
-            {
-                Destroy(outline.gameObject);
-            }
-        }
     }
 }
