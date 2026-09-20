@@ -475,10 +475,9 @@ class EditorToolController : MonoBehaviour
     {
         if (!movingObject || EditorManager.Instance.mainSelectedObject == null) return;
 
-        //EditorManager.Instance.mainSelectedObject.transform.position = startPos;
-        //EditorManager.Instance.mainSelectedObject.transform.eulerAngles = startRot;
-
         StopMove();
+        StopRotate();
+        StopScale();
     }
 
     public bool isEditorToolCollider(Collider2D c)
