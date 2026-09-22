@@ -2,6 +2,7 @@
 
 using Il2CppInterop.Runtime.Injection;
 using MelonLoader;
+using test.Test;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -55,5 +56,6 @@ public class PuttlerLevelLoader : MelonMod
         ClassInjector.RegisterTypeInIl2Cpp<VanillaMovingPlatformLevelObject>();
         ClassInjector.RegisterTypeInIl2Cpp<VanillaPortalLevelObject>();
         ClassInjector.RegisterTypeInIl2Cpp<VanillaSurfaceBlockLevelObject>();
+        ClassInjector.RegisterTypeInIl2Cpp<InJectedBundle>();
     }
 }

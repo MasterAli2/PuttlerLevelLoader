@@ -45,6 +45,8 @@ public class EditorManager : MonoBehaviour
         gameObject.AddComponent<EditorCamera>();
         gameObject.AddComponent<EditorPlacer>();
         gameObject.AddComponent<EditorOutline>();
+
+        var a = GameObject.Instantiate(BundleManager.testPrefab);
     }
     
     void Update()

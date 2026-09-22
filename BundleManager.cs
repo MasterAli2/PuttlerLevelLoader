@@ -52,6 +52,14 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("ScaleTool");
         }
     }
+
+    public static GameObject? testPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("test_prefab");
+        }
+    }
     private static GameObject? getGameobjectFromMainBundleOrNull(string name)
     {
         if (_bundle == null)
@@ -60,6 +68,8 @@ public static class BundleManager
         }
         return _bundle.LoadAsset<GameObject>("Assets/" + name + ".prefab");
     }
+
+    
 
     public static void init()
     {
