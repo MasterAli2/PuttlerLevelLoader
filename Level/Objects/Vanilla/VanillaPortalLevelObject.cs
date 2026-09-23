@@ -11,12 +11,4 @@ public class VanillaPortalLevelObject : LinkedLevelObject
 
     public VanillaPortalLevelObject(IntPtr ptr) : base(ptr) {}
 
-    public override void OnEditorPickup()
-    {
-        // nothing
-    }
-    public override void OnEditorDrop()
-    {
-        // nothing
-    }
 }

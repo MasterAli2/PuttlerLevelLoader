@@ -12,12 +12,5 @@ public class VanillaHoleLevelObject : BaseLevelObject
     // this is kept here cuz of how complicated it is, i have no idea how and why this works
 
 
-    public override void OnEditorPickup()
-    {
-        // nothing
-    }
-    public override void OnEditorDrop()
-    {
-        // nothing
-    }
+
 }

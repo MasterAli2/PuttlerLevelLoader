@@ -9,12 +9,5 @@ public class VanillaBlackholeLevelObject : BaseLevelObject
 
     public VanillaBlackholeLevelObject(IntPtr ptr) : base(ptr) {}
 
-    public override void OnEditorPickup()
-    {
-        // nothing
-    }
-    public override void OnEditorDrop()
-    {
-        // nothing
-    }
+
 }

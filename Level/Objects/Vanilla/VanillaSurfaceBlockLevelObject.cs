@@ -10,12 +10,4 @@ public class VanillaSurfaceBlockLevelObject : BaseLevelObject
     
     public VanillaSurfaceBlockLevelObject(IntPtr ptr) : base(ptr) {}
 
-    public override void OnEditorPickup()
-    {
-        // nothing
-    }
-    public override void OnEditorDrop()
-    {
-        // nothing
-    }
 }
