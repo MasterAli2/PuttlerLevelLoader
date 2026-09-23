@@ -149,7 +149,7 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         return (movingPlatform, shadowMovingPlatform, pointB, pointA, shadowCollider.transform);
     }
 
-    public override BaseLevelObject[] PlaceDefault()
+    public override BaseLevelObject PlaceDefault()
     {
         throw new NotImplementedException();
         SerialLevelObject serialLevelObject = new SerialLevelObject();
