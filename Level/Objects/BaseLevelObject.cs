@@ -30,5 +30,6 @@ public class BaseLevelObject : MonoBehaviour
     public virtual void OnEditorDrop(){}
     public virtual void OnEditorSelectMain(){}
     public virtual void OnEditorUnSelectMain(){}
+    public virtual void OnEditorUpdate(){}
     
 }

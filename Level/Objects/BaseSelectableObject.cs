@@ -42,7 +42,7 @@ public class BaseSelectableObject : MonoBehaviour
     public virtual void OnEditorDrop(){ baseLevelObject.OnEditorDrop(); }
     public virtual void OnEditorSelectMain(){ baseLevelObject.OnEditorSelectMain(); }
     public virtual void OnEditorUnSelectMain(){ baseLevelObject.OnEditorUnSelectMain(); }
-    public virtual void OnEditorUpdated(){ /*baseLevelObject.OnEditorUpdated()*/; }
+    public virtual void OnEditorUpdate(){ baseLevelObject.OnEditorUpdate(); }
     
 }
 
