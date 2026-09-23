@@ -161,6 +161,16 @@ class EditorToolController : MonoBehaviour
         Move();
         Rotate();
         Scale();
+        Trash();
+    }
+
+    void Trash()
+    {
+        bool down = Input.GetKeyDown(KeyCode.T);
+        if (down && EditorManager.Instance.mainSelectedObject != null)
+        {
+            EditorManager.Instance.mainSelectedObject.Trash();
+        }
     }
 
     void Rotate()
