@@ -10,7 +10,7 @@ public class LevelManager : MonoBehaviour
     public LevelManager(IntPtr ptr) : base(ptr) {}
     public static CustomLevel? currentLevel;
     public static int levelIndex;
-    public static List<GameObject>? currentLevelObjs;
+    public static List<BaseLevelObject>? currentLevelObjs;
 
     public static bool inCustomLevel;
     public static void openCustomLevel(int levelIndex)

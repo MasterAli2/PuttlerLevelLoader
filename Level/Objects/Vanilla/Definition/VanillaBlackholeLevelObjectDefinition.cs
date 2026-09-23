@@ -8,11 +8,12 @@ public class VanillaBlackholeLevelObjectDefinition : LevelObjectDefinition
 {
     public static GameObject prefab;
 
-    public override GameObject[] Place(SerialLevelObject serialLevelObject)
+    public override BaseLevelObject Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = Utils.spawnPrefabWithValues(prefab, Vec3D.fromJson(serialLevelObject.data["pos"]));
         
-        obj.AddComponent<VanillaBlackholeLevelObject>();
+        BaseLevelObject baseLevelObject = obj.AddComponent<VanillaBlackholeLevelObject>();
+        obj.AddComponent<BaseSelectableObject>();
 
         GameObject.Destroy(obj.transform.GetChild(0).gameObject);
         GameObject spriteObj = new GameObject("Sprite");
@@ -30,7 +31,7 @@ public class VanillaBlackholeLevelObjectDefinition : LevelObjectDefinition
 
         Utils.disableCollision(entryCollision);
 
-        return new GameObject[] { obj };
+        return baseLevelObject;
     }
     
 
@@ -66,7 +67,7 @@ public class VanillaBlackholeLevelObjectDefinition : LevelObjectDefinition
     }
 
 
-    public override GameObject[] PlaceDefault()
+    public override BaseLevelObject PlaceDefault()
     {
         SerialLevelObject serialLevelObject = new SerialLevelObject();
 

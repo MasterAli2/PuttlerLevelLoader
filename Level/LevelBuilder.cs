@@ -46,11 +46,11 @@ public static class LevelBuilder
 
     
 
-    public static List<GameObject> buildFromObj(CustomLevel level)
+    public static List<BaseLevelObject> buildFromObj(CustomLevel level)
     {
 
         placeObjectiveBall(new Vector3(level.ballX, level.ballY, 0f));
-        List<GameObject> result = new List<GameObject>();
+        List<BaseLevelObject> result = new List<BaseLevelObject>();
 
         foreach (SerialLevelObject obj in level.levelObjects)
         {
@@ -61,15 +61,16 @@ public static class LevelBuilder
                 continue;
             }
 
-            GameObject[] newObjs = LevelObjectRegistry.Registry[obj.type].Place(obj);
-
-            foreach (GameObject newObj in newObjs)
+            if (obj.type == "moving platform")
             {
-                if (newObj != null)
-                {
-                    result.Add(newObj); 
-                }
+                continue;
             }
+
+            BaseLevelObject newObjs = LevelObjectRegistry.Registry[obj.type].Place(obj);
+
+
+            result.Add(newObjs); 
+
             
 
 

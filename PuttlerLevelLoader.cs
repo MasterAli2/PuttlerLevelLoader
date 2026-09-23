@@ -41,6 +41,7 @@ public class PuttlerLevelLoader : MelonMod
 
         ClassInjector.RegisterTypeInIl2Cpp<BaseLevelObject>();
         ClassInjector.RegisterTypeInIl2Cpp<LinkedLevelObject>();
+        ClassInjector.RegisterTypeInIl2Cpp<BaseSelectableObject>();
 
         ClassInjector.RegisterTypeInIl2Cpp<EditorCamera>();
         ClassInjector.RegisterTypeInIl2Cpp<EditorManager>();

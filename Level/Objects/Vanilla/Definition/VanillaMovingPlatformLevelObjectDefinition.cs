@@ -12,8 +12,10 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
 
     public static GameObject prefab;
 
-    public override GameObject[] Place(SerialLevelObject serialLevelObject)
+    public override BaseLevelObject Place(SerialLevelObject serialLevelObject)
     {
+        throw new NotImplementedException();
+
         (Transform obj1, Transform obj2, Transform pointB, Transform pointA, Transform myShadowObject) = placeMovingPlatform(
             Vec3D.fromJson(serialLevelObject.data["start"]),
             Vec3D.fromJson(serialLevelObject.data["end"]),
@@ -52,7 +54,7 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
 
 
 
-        return new GameObject[] { platform.gameObject, shadow.gameObject };
+        //return new GameObject[] { platform.gameObject, shadow.gameObject };
     }
 
     public override void ApplyEditorPlaceButtons(GameObject gameObject)
@@ -147,15 +149,16 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         return (movingPlatform, shadowMovingPlatform, pointB, pointA, shadowCollider.transform);
     }
 
-    public override GameObject[] PlaceDefault()
+    public override BaseLevelObject[] PlaceDefault()
     {
+        throw new NotImplementedException();
         SerialLevelObject serialLevelObject = new SerialLevelObject();
 
         serialLevelObject.data["start"] = Vec3D.toJson(Vector3.zero);
         serialLevelObject.data["end"] = Vec3D.toJson(Vector3.zero);
         serialLevelObject.data["rot"] = JsonDocument.Parse("0").RootElement;
 
-        return Place(serialLevelObject);
+        //return Place(serialLevelObject);
 
 
     }

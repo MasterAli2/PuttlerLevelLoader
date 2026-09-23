@@ -13,8 +13,9 @@ public class EditorPlacer : MonoBehaviour
 
 
     public bool isPlacing = false;
-    public GameObject mainPlacingObject;
-    public List<GameObject> placingObjects;
+    public BaseLevelObject mainPlacingObject;
+    public BaseSelectableObject firstPlacingObjects;
+    public List<BaseSelectableObject> placingObjects;
 
     void Awake()
     {
@@ -31,12 +32,13 @@ public class EditorPlacer : MonoBehaviour
             EditorManager.Instance.UnSelect();
         }
 
-        placingObjects = levelObjectDefinition.PlaceDefault().ToList();
+        mainPlacingObject = levelObjectDefinition.PlaceDefault();
+        placingObjects = mainPlacingObject.GetSelectables().ToList();
         if (placingObjects.Count == 0)
         {
             return;
         }
-        mainPlacingObject = placingObjects[0];
+        firstPlacingObjects = placingObjects[0];
 
         isPlacing = true;
         pressed_down =false;
@@ -75,7 +77,7 @@ public class EditorPlacer : MonoBehaviour
             if (placingObjects.Count == 0)
             {
                 isPlacing = false;
-                EditorManager.Instance.SelectObj(mainPlacingObject.GetComponent<BaseLevelObject>());
+                EditorManager.Instance.SelectObj(firstPlacingObjects);
                 
             }
 

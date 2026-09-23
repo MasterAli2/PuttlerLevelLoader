@@ -7,14 +7,23 @@ public class BaseLevelObject : MonoBehaviour
 {
     public BaseLevelObject(IntPtr ptr) : base(ptr) {}
 
+    public List<BaseSelectableObject> baseSelectableObjects = new List<BaseSelectableObject>();
+
     public void Awake()
     {
         gameObject.tag = "Level Object";
     }
 
+    public virtual BaseSelectableObject[] GetSelectables()
+    {
+        return baseSelectableObjects.ToArray();
+    }
     public virtual void OnDestroy(){}
 
-
+    public virtual void Trash()
+    {
+        Destroy(gameObject);
+    }
 
     public virtual void OnEditorPickup(){}
     public virtual void OnEditorTrash(){}

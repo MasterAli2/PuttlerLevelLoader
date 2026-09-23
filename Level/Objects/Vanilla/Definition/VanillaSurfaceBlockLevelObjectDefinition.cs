@@ -9,7 +9,7 @@ public class VanillaSurfaceBlockLevelObjectDefinition : LevelObjectDefinition
 {
     public static GameObject prefab;
 
-    public override GameObject[] Place(SerialLevelObject serialLevelObject)
+    public override BaseLevelObject Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = Utils.spawnPrefabWithValues(prefab,
          Vec3D.fromJson(serialLevelObject.data["pos"]),
@@ -21,8 +21,11 @@ public class VanillaSurfaceBlockLevelObjectDefinition : LevelObjectDefinition
         
         obj.GetComponent<BoxCollider2D>().size = Vector2.one;
 
-        obj.AddComponent<VanillaSurfaceBlockLevelObject>();
-        return new GameObject[] { obj };
+        BaseLevelObject baseLevelObject = obj.AddComponent<VanillaSurfaceBlockLevelObject>();
+        obj.AddComponent<BaseSelectableObject>();
+
+
+        return baseLevelObject;
         
     }
 
@@ -42,7 +45,7 @@ public class VanillaSurfaceBlockLevelObjectDefinition : LevelObjectDefinition
         Utils.HideAndDisable(prefab);
     }
 
-    public override GameObject[] PlaceDefault()
+    public override BaseLevelObject PlaceDefault()
     {
         SerialLevelObject serialLevelObject = new SerialLevelObject();
 

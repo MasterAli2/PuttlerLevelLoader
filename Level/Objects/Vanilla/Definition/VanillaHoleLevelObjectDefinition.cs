@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using UnityEngine;
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
@@ -8,12 +9,13 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
     public static GameObject prefab;
     public static Sprite sprite;
 
-    public override GameObject[] Place(SerialLevelObject serialLevelObject)
+    public override BaseLevelObject Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = placeLevelHole(Vec3D.fromJson(serialLevelObject.data["pos"]), serialLevelObject.data["rot"].GetSingle(), Vec3D.fromJson(serialLevelObject.data["size"]));
         
-        obj.AddComponent<VanillaHoleLevelObject>();
-        return new GameObject[] { obj };
+        BaseLevelObject baseLevelObject = obj.AddComponent<VanillaHoleLevelObject>();
+        obj.AddComponent<BaseSelectableObject>();
+        return baseLevelObject;
         
     }
 
@@ -102,8 +104,14 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
 
     }
 
-    public override GameObject[] PlaceDefault()
+    public override BaseLevelObject PlaceDefault()
     {
-        throw new NotImplementedException();
+        SerialLevelObject serialLevelObject = new SerialLevelObject();
+
+        serialLevelObject.data["pos"] = Vec3D.toJson(Vector3.zero);
+        serialLevelObject.data["size"] = Vec3D.toJson(Vector3.one);
+        serialLevelObject.data["rot"] = JsonDocument.Parse("0").RootElement;
+
+        return Place(serialLevelObject);
     }
 }

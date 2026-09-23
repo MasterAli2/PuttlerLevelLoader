@@ -29,7 +29,7 @@ public class EditorManager : MonoBehaviour
 
 
     // Called main to allow selecting multiple objects in the future
-    public BaseLevelObject? mainSelectedObject;
+    public BaseSelectableObject? mainSelectedObject;
 
     public EditorManager(IntPtr ptr) : base(ptr) {}
 
@@ -77,7 +77,8 @@ public class EditorManager : MonoBehaviour
         bool flag = false;
         foreach (Collider2D collider in hits)
         {
-            if (!collider.transform.root.TryGetComponent<BaseLevelObject>(out var obj)) 
+            var obj = collider.GetComponentInParent<BaseSelectableObject>();
+            if (obj == null) 
             {
                 continue;
             }
@@ -97,7 +98,7 @@ public class EditorManager : MonoBehaviour
             UnSelect();   
     }
 
-    public void SelectObj(BaseLevelObject levelObject)
+    public void SelectObj(BaseSelectableObject levelObject)
     {
         levelObject.OnEditorSelectMain();
 
