@@ -1,83 +1,52 @@
+
 using System;
-using System.Text.Json;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-public class VanillaMovingPlatformLevelObject : LinkedLevelObject
+#pragma warning disable CS8618
+
+public class VanillaMovingPlatformLevelObject : BaseLevelObject
 {
-    public bool isShadow = false;
-    public Transform pointA;
-    public Transform pointB;
-    public Transform shadow;
     public MovingPlatform movingPlatform;
     public MovingShadowPlatform movingShadowPlatform;
 
-    public static GameObject prefab;
+    public Transform pointA;
+    public Transform pointB;
 
-    public VanillaMovingPlatformLevelObject(IntPtr ptr) : base(ptr) {}
+    public VanillaMovingPlatformLevelObject(IntPtr ptr) : base(ptr) { }
 
     void Start()
     {
-        shadow.transform.position = transform.position;
+        movingPlatform = GetComponentInChildren<MovingPlatform>();
+        movingShadowPlatform = GetComponentInChildren<MovingShadowPlatform>();
+
+        pointA = transform.GetChild(0);
+        pointB = transform.GetChild(1);
     }
 
-
-    public override void OnDestroy()
+    public override void OnEditorUpdate()
     {
-        base.OnDestroy();
+        base.OnEditorUpdate();
 
-        if (isShadow)
+        if (movingPlatform == null || movingShadowPlatform == null || pointA == null) 
+                return;
+                
+        movingPlatform.startPosition = pointA.transform.position;
+        movingShadowPlatform.startPosition = pointA.transform.position;
+
+        if (movingPlatform.startGoingPointA)
         {
-            //Destroy(pointB.gameObject);
-        }
-        else
-        {   
-            //Destroy(GetComponent<MovingShadowPlatform>().platform.gameObject);
-            //Destroy(pointA.gameObject);
-        }
-    }
-
-    public override void OnEditorPickup()
-    {
-        // nothing
-    }
-
-    public override void OnEditorDrop()
-    {
-
-        var a = movingShadowPlatform.targetPosition;
-        
-        if (isShadow)
-        {
-            if (a == pointB.position)
-            {
-                a = transform.position;
-            }
-
-            pointB.position = transform.position; 
+            movingPlatform.targetPosition = pointA.position;
+            //movingShadowPlatform.targetPosition = pointA.position;
         }
         else
         {
-            if (a == pointA.position)
-            {
-                a = transform.position;
-            }
-            pointA.position = transform.position;
+            movingPlatform.targetPosition = pointB.position;
+            //movingShadowPlatform.targetPosition = pointB.position;
         }
-
-
-        // TODO: fix startGoingA field thing
-        //movingPlatform.Start();
-        movingPlatform.startPosition = pointA.position;
-        movingPlatform.targetPosition = pointB.position;
-
-        //movingShadowPlatform.Start();
-        movingShadowPlatform.startPosition = pointA.position;
-        movingShadowPlatform.targetPosition = a;
-
     }
 }
 

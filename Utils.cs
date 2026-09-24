@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
+using System.Reflection;
 
 public static class Utils
 {
@@ -179,6 +180,41 @@ public static class Utils
     {
         if (grid == 0f) return value;
         return Mathf.Round(value / grid) * grid;
+    }
+
+    public static void SetTransform(Transform destination, Transform source)
+    {
+        if (destination == null || source == null) return;
+
+        destination.position = source.position;
+        destination.rotation = source.rotation;
+        destination.localScale = source.localScale;
+    }
+
+    public static object InvokeMethod(object target, string methodName)
+    {
+        if (target == null)
+            throw new ArgumentNullException(nameof(target));
+
+        MethodInfo method = target.GetType().GetMethod(
+            methodName,
+            BindingFlags.Instance |
+            BindingFlags.Public |
+            BindingFlags.NonPublic
+        );
+
+        if (method == null)
+            throw new MissingMethodException(
+                target.GetType().Name,
+                methodName
+            );
+
+        if (method.GetParameters().Length != 0)
+            throw new ArgumentException(
+                $"Method '{methodName}' must be parameterless."
+            );
+
+        return method.Invoke(target, null);
     }
     
 }
