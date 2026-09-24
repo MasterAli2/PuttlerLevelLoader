@@ -40,7 +40,11 @@ class EditorOutline : MonoBehaviour
             outline.transform.localEulerAngles = Vector3.zero;
 
             newSpriteRenderer.sprite = spriteRenderer.sprite;
-            newSpriteRenderer.color = Color.yellow;
+
+            Color color = Color.yellow;
+            color.a = spriteRenderer.color.a;
+
+            newSpriteRenderer.color = color;
             newSpriteRenderer.sortingOrder = spriteRenderer.sortingOrder-1;
 
             ApplyOutlineScale(outline.transform);
