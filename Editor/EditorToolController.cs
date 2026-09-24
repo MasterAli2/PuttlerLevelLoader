@@ -216,12 +216,17 @@ class EditorToolController : MonoBehaviour
         startMousePos = Utils.pointerWorldPos();
 
         rotatingObject = true;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
+
     }
     private void StopRotate()
     {
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
         rotatingObject = false;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
     }
 
     void Move()
@@ -322,6 +327,9 @@ class EditorToolController : MonoBehaviour
             startMoveToolPos = (Vector2)moveToolObj.transform.position;
 
         movingObject = true;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
+
     }
     private void StopMove()
     {
@@ -331,6 +339,9 @@ class EditorToolController : MonoBehaviour
         movingObject = false;
 
         onDrop?.Invoke();
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
+
     }
     void Scale()
     {
@@ -454,6 +465,9 @@ class EditorToolController : MonoBehaviour
             //startScaleToolPos = (Vector2)scaleToolObj.transform.position;
 
         scalingObject = true;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
+
     }
     private void StopScale()
     {
@@ -462,6 +476,9 @@ class EditorToolController : MonoBehaviour
         ResetScaleTool();
 
         scalingObject = false;
+
+        EditorManager.Instance.mainSelectedObject.OnEditorUpdate();
+
     }
 
     void ResetScaleTool()

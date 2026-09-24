@@ -91,6 +91,8 @@ public class EditorManager : MonoBehaviour
             UnSelect();    
             
             SelectObj(obj);
+
+            obj.OnEditorUpdate();
             
             return;
         }

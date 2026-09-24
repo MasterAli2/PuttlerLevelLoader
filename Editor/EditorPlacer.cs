@@ -43,6 +43,7 @@ public class EditorPlacer : MonoBehaviour
         isPlacing = true;
         pressed_down =false;
 
+        mainPlacingObject.OnEditorUpdate();
     }
 
     bool pressed_down = false;
@@ -70,7 +71,9 @@ public class EditorPlacer : MonoBehaviour
         if (up)
         {
 
-            placingObjects[0].transform.position = mousePos;
+            placingObjects[0].transform.position = Utils.snapToGridVector(mousePos, EditorToolController.Instance.moveGridsize);
+            placingObjects[0].OnEditorUpdate();
+
             placingObjects.RemoveAt(0);
 
             
