@@ -60,13 +60,72 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("test_prefab");
         }
     }
+
+    public static AnimationClip? ExtraMenu1Anim
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraMenu1");
+        }
+    }
+    public static AnimationClip? ExtraMenu2Anim
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraMenu2");
+        }
+    }
+    public static AnimationClip? ExtraMenuGoEditor
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraAnims/GoEditor");
+        }
+    }
+    public static AnimationClip? ExtraMenuEditorGoMain
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraAnims/EditorGoMain");
+        }
+    }
+
+
+    public static GameObject? ExtrasMenuPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("UI/Extras Menu");
+        }
+    }
+
+    public static Sprite? ExtraButtonSprite
+    {
+        get
+        {
+            return getSpriteFromMainBundleOrNull("UI/extra_sign");
+        }
+    }
+
     private static GameObject? getGameobjectFromMainBundleOrNull(string name)
+    {
+        return getAssetFromMainBundleOrNull<GameObject>(name + ".prefab");
+    }
+    private static AnimationClip? getAnimFromMainBundleOrNull(string name)
+    {
+        return getAssetFromMainBundleOrNull<AnimationClip>(name + ".anim");
+    }
+    private static Sprite? getSpriteFromMainBundleOrNull(string name)
+    {
+        return getAssetFromMainBundleOrNull<Sprite>(name + ".png");
+    }
+    private static T? getAssetFromMainBundleOrNull<T>(string name) where T: UnityEngine.Object
     {
         if (_bundle == null)
         {
             return null;
         }
-        return _bundle.LoadAsset<GameObject>("Assets/" + name + ".prefab");
+        return _bundle.LoadAsset<T>("Assets/" + name);
     }
 
     

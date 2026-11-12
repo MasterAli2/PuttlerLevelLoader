@@ -15,6 +15,9 @@ using System.Linq;
 using System.Text.Json;
 using System.Reflection;
 
+   using Il2CppInterop.Runtime.InteropTypes;
+using Il2CppInterop.Runtime.InteropTypes.Arrays;
+
 public static class Utils
 {
     public static JsonElement ToJsonElement<T>(T value)
@@ -191,6 +194,14 @@ public static class Utils
         destination.localScale = source.localScale;
     }
 
+    static int check = 1;
+    public static void checkpoint()
+    {
+        MelonLogger.Msg($"CheckPoint: {check}");
+
+        check++;
+    }
+
     public static object InvokeMethod(object target, string methodName)
     {
         if (target == null)
@@ -216,5 +227,23 @@ public static class Utils
 
         return method.Invoke(target, null);
     }
-    
+
+    public static void expandOnHoverObj(GameObject gameObject, float expandAmount, float expandSpeed)
+    {
+        UIExpandOnHover uIExpandOnHover = gameObject.gameObject.AddComponent<UIExpandOnHover>();
+        uIExpandOnHover.expandAmount = expandAmount;
+        uIExpandOnHover.expandSpeed = expandSpeed;
+    }
+
+    public static void TryPlayAnim(StartAnimation startAnimation)
+    {
+        //MelonLogger.Msg($"{startAnimation._animation.isPlaying}");
+
+        if (true || !startAnimation._animation.isPlaying)
+        {
+            startAnimation.PlayAnimation();
+        }
+
+    }
+
 }

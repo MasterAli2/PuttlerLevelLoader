@@ -60,6 +60,9 @@
     <Reference Include="UnityEngine.AudioModule.dll">
       <HintPath>/home/ali/.local/share/com.kesomannen.gale/puttler/profiles/test2/MelonLoader/Il2CppAssemblies/UnityEngine.AudioModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AnimationModule.dll">
+      <HintPath>/home/ali/.local/share/com.kesomannen.gale/puttler/profiles/test2/MelonLoader/Il2CppAssemblies/UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
     
     
   </ItemGroup>
