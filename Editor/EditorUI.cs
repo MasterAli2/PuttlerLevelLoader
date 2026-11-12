@@ -33,7 +33,7 @@ public class EditorUI : MonoBehaviour
         {
             return;
         }
-        GameObject leftBar = GameObject.Instantiate(BundleManager.leftBarPrefab, GameObject.Find("Main Button Toggle ").transform);;
+        GameObject leftBar = GameObject.Instantiate(BundleManager.leftBarPrefab, GameObject.Find("Main Button Toggle ").transform).transform.GetChild(0).gameObject;;
         
         leftBar.transform.GetChild(0).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
         leftBar.transform.GetChild(0).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(1);}));
