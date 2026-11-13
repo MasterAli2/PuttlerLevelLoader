@@ -131,6 +131,11 @@ class EditorToolController : MonoBehaviour
         {
             moveToolObj.SetActive(true);
             moveToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+
+            if (!EditorManager.Instance.refFrameGlobal)
+            {
+                moveToolObj.transform.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
+            }
         }
         else if (mode == 2)
         {
@@ -142,17 +147,21 @@ class EditorToolController : MonoBehaviour
         {
             scaleToolObj.SetActive(true);
             scaleToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+            scaleToolObj.transform.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
         }
     }
     public void OnDeSelect()
     {
         moveToolObj.SetActive(false);
+        moveToolObj.transform.rotation = Quaternion.identity;
         movingObject = false;
 
         rotateToolObj.SetActive(false);
+        rotateToolObj.transform.rotation = Quaternion.identity;
         rotatingObject = false;
 
         scaleToolObj.SetActive(false);
+        scaleToolObj.transform.rotation = Quaternion.identity;
         scalingObject = false;
     }
     void Update()
@@ -236,29 +245,29 @@ class EditorToolController : MonoBehaviour
         Vector2 mousePos = (Vector2)Utils.pointerWorldPos();
 
         if (movingObject && EditorManager.Instance.mainSelectedObject != null)
-        {
-            // compute tool position from mouse and offsets, then constrain by dragState
-            Vector2 toolPos = mousePos + moveToolOffset;
+        {   
+            // had copilot rewrite this part for local movement cuz im too stupid to understand the math
+            Vector3 toolPos;
+            Vector3 desiredObjPos;
 
-            if (moveDirection == ToolDirection.Up)
+            if (moveDirection == ToolDirection.All)
             {
-                toolPos.x = startMoveToolPos.x;
+                toolPos = (Vector3)(mousePos + moveToolOffset);
+                desiredObjPos = toolPos + (Vector3)moveObjOffset;
             }
-            else if (moveDirection == ToolDirection.Right)
+            else
             {
-                toolPos.y = startMoveToolPos.y;
-            }
+                Vector3 axis = moveDirection == ToolDirection.Right
+                    ? moveToolBoundsDown.transform.up
+                    : moveToolBoundsUp.transform.up;
+                axis.Normalize();
 
+                Vector3 mouseOffset = mousePos - startMousePos;
+                float distance = Vector3.Dot(mouseOffset, axis);
 
-            Vector3 desiredObjPos = (Vector3)(toolPos + moveObjOffset);
-
-            if (moveDirection == ToolDirection.Up)
-            {
-                desiredObjPos.x = startPos.x;
-            }
-            else if (moveDirection == ToolDirection.Right)
-            {
-                desiredObjPos.y = startPos.y;
+                Vector3 movement = distance * axis;
+                toolPos = (Vector3)startMoveToolPos + movement;
+                desiredObjPos = startPos + movement;
             }
 
             // Apply grid
