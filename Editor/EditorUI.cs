@@ -65,7 +65,12 @@ public class EditorUI : MonoBehaviour
         GameObject refFrameToggleObj = topBar.transform.GetChild(3).gameObject;
         Button refFrameToggleButton = refFrameToggleObj.GetComponent<Button>();
         refFrameToggleButton.onClick = new Button.ButtonClickedEvent();
-        refFrameToggleButton.onClick.AddListener((System.Action)(() => {Utils.flipObjectAndBool(refFrameToggleObj, ref EditorManager.Instance.refFrameGlobal);}));
+        refFrameToggleButton.onClick.AddListener((System.Action)(() => {
+            Utils.flipObjectAndBool(refFrameToggleObj, ref EditorManager.Instance.refFrameGlobal);
+            
+            EditorToolController.Instance.OnDeSelect();
+            EditorToolController.Instance.OnSelect();
+            }));
         
 
         MelonLogger.Msg(topBar.transform.GetChild(0).GetComponent<Button>().name);
