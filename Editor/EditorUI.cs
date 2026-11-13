@@ -24,7 +24,9 @@ public class EditorUI : MonoBehaviour
         removeDefaultCameraMovement();
         setupSwitchButton();
         setupEditorButtons();
+
         doLeftBar();
+        doTopBar();
     }
 
     void doLeftBar()
@@ -45,6 +47,28 @@ public class EditorUI : MonoBehaviour
         leftBar.transform.GetChild(2).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(3);}));
 
         MelonLogger.Msg(leftBar.transform.GetChild(0).GetComponent<Button>().name);
+    }
+
+    void doTopBar()
+    {
+        if (BundleManager.topBarPrefab == null)
+        {
+            return;
+        }
+        GameObject topBar = GameObject.Instantiate(BundleManager.topBarPrefab, GameObject.Find("Main Button Toggle ").transform).transform.GetChild(0).gameObject;;
+        
+        GameObject snapGridToggleObj = topBar.transform.GetChild(1).gameObject;
+        Button snapGridToggleButton = snapGridToggleObj.GetComponent<Button>();
+        snapGridToggleButton.onClick = new Button.ButtonClickedEvent();
+        snapGridToggleButton.onClick.AddListener((System.Action)(() => {Utils.flipObjectAndBool(snapGridToggleObj, ref EditorManager.Instance.snapToGrid);}));
+        
+        GameObject refFrameToggleObj = topBar.transform.GetChild(3).gameObject;
+        Button refFrameToggleButton = refFrameToggleObj.GetComponent<Button>();
+        refFrameToggleButton.onClick = new Button.ButtonClickedEvent();
+        refFrameToggleButton.onClick.AddListener((System.Action)(() => {Utils.flipObjectAndBool(refFrameToggleObj, ref EditorManager.Instance.refFrameGlobal);}));
+        
+
+        MelonLogger.Msg(topBar.transform.GetChild(0).GetComponent<Button>().name);
     }
 
     void removeDefaultCameraMovement()

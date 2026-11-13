@@ -31,6 +31,13 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("LeftBar");
         }
     }
+    public static GameObject? topBarPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("TopBar");
+        }
+    }
     public static GameObject? moveToolPrefab
     {
         get

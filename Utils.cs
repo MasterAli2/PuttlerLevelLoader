@@ -246,4 +246,23 @@ public static class Utils
 
     }
 
+    public static void flipObjectAndBool(GameObject obj, ref bool b)
+    {
+        b = !b;
+
+        GameObject t = obj.transform.GetChild(0).gameObject;
+        GameObject f = obj.transform.GetChild(1).gameObject;
+
+        if (b)
+        {
+            t.SetActive(true);
+            f.SetActive(false);
+        }
+        else
+        {
+            t.SetActive(false);
+            f.SetActive(true);
+        }
+    }
+
 }

@@ -31,6 +31,13 @@ public class EditorManager : MonoBehaviour
     // Called main to allow selecting multiple objects in the future
     public BaseSelectableObject? mainSelectedObject;
 
+
+    // Top Bar State
+
+    public bool snapToGrid = true;
+
+    public bool refFrameGlobal = true;
+
     public EditorManager(IntPtr ptr) : base(ptr) {}
 
     void Awake()
