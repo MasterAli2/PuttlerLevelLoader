@@ -186,7 +186,9 @@ class EditorToolController : MonoBehaviour
             Vector2 direction = mousePos - rotateToolPivot.position;
             
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            angle = Utils.snapToGridValue(angle, rotateGridsize);
+
+            if (EditorManager.Instance.snapToGrid)
+                angle = Utils.snapToGridValue(angle, rotateGridsize);
             
             rotateToolPivot.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
             EditorManager.Instance.mainSelectedObject.transform.rotation = rotateToolPivot.rotation;
@@ -260,8 +262,11 @@ class EditorToolController : MonoBehaviour
             }
 
             // Apply grid
-            toolPos = Utils.snapToGridVector(toolPos, moveGridsize);
-            desiredObjPos = Utils.snapToGridVector(desiredObjPos, moveGridsize);
+            if (EditorManager.Instance.snapToGrid)
+            {
+                toolPos = Utils.snapToGridVector(toolPos, moveGridsize);
+                desiredObjPos = Utils.snapToGridVector(desiredObjPos, moveGridsize);
+            }
 
             moveToolObj.transform.position = toolPos;
             EditorManager.Instance.mainSelectedObject.transform.position = desiredObjPos;
@@ -352,7 +357,8 @@ class EditorToolController : MonoBehaviour
             Transform mainSelectedObject = EditorManager.Instance.mainSelectedObject.transform;
 
             Vector2 mousePosDifference = mousePos - startMousePos;
-            mousePosDifference = Utils.snapToGridVector(mousePosDifference, scaleGridsize);
+            if (EditorManager.Instance.snapToGrid)
+                mousePosDifference = Utils.snapToGridVector(mousePosDifference, scaleGridsize);
 
             bool all = scaleDirection == ToolDirection.All;
             if (all)
