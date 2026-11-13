@@ -46,6 +46,9 @@ class EditorToolController : MonoBehaviour
     public Vector2 moveToolOffset = Vector2.zero;
     public Vector2 startMoveToolPos = Vector2.zero;
 
+    public GameObject moveRightLineObj;
+    public GameObject moveUpLineObj;
+
     // Rotate
     public bool rotatingObject = false;
     public GameObject rotateToolObj;
@@ -97,6 +100,9 @@ class EditorToolController : MonoBehaviour
             moveToolBoundsCenter = moveToolObj.transform.GetChild(0).GetComponent<BoxCollider2D>();
             moveToolBoundsUp = moveToolObj.transform.GetChild(1).GetComponent<BoxCollider2D>();
             moveToolBoundsDown = moveToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
+
+            moveUpLineObj = moveToolBoundsUp.transform.GetChild(1).gameObject;
+            moveRightLineObj = moveToolBoundsDown.transform.GetChild(1).gameObject;
         }
 
         if (BundleManager.rotateToolPrefab != null)
@@ -331,6 +337,18 @@ class EditorToolController : MonoBehaviour
 
     public void StartMove()
     {
+        moveRightLineObj.SetActive(true);
+        moveUpLineObj.SetActive(true);
+
+        if (moveDirection == ToolDirection.Up)
+        {
+            moveRightLineObj.SetActive(false);   
+        }
+        else if (moveDirection == ToolDirection.Right)
+        {
+            moveUpLineObj.SetActive(false);
+        }
+
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
         startPos = EditorManager.Instance.mainSelectedObject.transform.position;
@@ -347,6 +365,9 @@ class EditorToolController : MonoBehaviour
     }
     private void StopMove()
     {
+        moveRightLineObj.SetActive(false);
+        moveUpLineObj.SetActive(false);
+
         if (EditorManager.Instance.mainSelectedObject == null) return;
 
         EditorManager.Instance.mainSelectedObject.OnEditorDrop();
