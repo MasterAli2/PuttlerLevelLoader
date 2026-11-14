@@ -31,6 +31,13 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("LeftBar");
         }
     }
+    public static GameObject? bottomBarPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("bottombar");
+        }
+    }
     public static GameObject? topBarPrefab
     {
         get
@@ -139,7 +146,7 @@ public static class BundleManager
         {
             return null;
         }
-        return _bundle.LoadAsset<T>("Assets/" + name);
+        return _bundle.LoadAsset<T>("assets/" + name);
     }
 
     

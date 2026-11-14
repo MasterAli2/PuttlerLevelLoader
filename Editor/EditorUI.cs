@@ -26,12 +26,13 @@ public class EditorUI : MonoBehaviour
 
         removeDefaultCameraMovement();
         setupSwitchButton();
-        setupEditorButtons();
         setupExitButton();
 
 
         doLeftBar();
         doTopBar();
+        setupEditorButtons();
+
     }
     
     void setupExitButton()
@@ -157,48 +158,47 @@ public class EditorUI : MonoBehaviour
     }
     void setupEditorButtons()
     {
-
-        editorButtons1 = GameObject.Instantiate(mainButtonHolder, mainButtonHolder.transform.parent);
-    
-        editorButtons1.transform.name = "Editor Buttons";
-        editorButtons1.SetActive(false);
-
-        var bagHolder = editorButtons1.transform.GetChild(0).GetChild(2);
-
-        for (int i = 1; i < 7; i++)
+        if (BundleManager.bottomBarPrefab == null)
         {
-            Destroy(bagHolder.transform.GetChild(i).gameObject);
+            throw new NullReferenceException("bottomBarPrefab is null");
         }
 
-        GameObject baseUIThingFish = bagHolder.transform.GetChild(0).gameObject;
-        Destroy(baseUIThingFish.transform.GetChild(1).gameObject);
-        //Destroy(baseUIThingFish.transform.GetChild(0).GetComponent<Image>());
+        editorButtons1 = GameObject.Instantiate(BundleManager.bottomBarPrefab, GameObject.Find("Main Button Toggle ").transform);
+    
+        editorButtons1.SetActive(false);
 
-        Utils.HideAndDisable(baseUIThingFish);
 
-        foreach (var pair in LevelObjectRegistry.Registry)
+        var bagHolder = editorButtons1.transform.GetChild(0);
+
+        var objects = new[] { "block", "portal" , "blackhole", "", "", "moving platform", "", "", ""};
+
+        for (int index = 0; index < objects.Length; index++)
         {
-            GameObject obj = GameObject.Instantiate(baseUIThingFish, baseUIThingFish.transform.parent);
-            obj.hideFlags = HideFlags.None;
-            obj.SetActive(true);
 
-            pair.Value.ApplyEditorPlaceButtons(obj);
+            string obj_name = objects[index];
 
-            var a = obj.GetComponent<Button>();
+            if (obj_name == "")
+            {
+                continue;
+            }
 
-            a.onClick = new Button.ButtonClickedEvent();
-            a.onClick.AddListener((System.Action)(() =>
+            Transform obj = bagHolder.GetChild(index);
+
+            var button = obj.GetComponent<Button>();
+
+            button.onClick = new Button.ButtonClickedEvent();
+            button.onClick.AddListener((System.Action)(() =>
             {
                 if (EditorToolController.Instance && EditorManager.Instance && !GameManager.Instance.IsStarted)
                 {
 
-                    EditorPlacer.Instance.Place(LevelObjectRegistry.Registry[pair.Key]);
+                    EditorPlacer.Instance.Place(LevelObjectRegistry.Registry[obj_name]);
     
                 }
             }));
-
         }
 
-
     }
+
+
 }
