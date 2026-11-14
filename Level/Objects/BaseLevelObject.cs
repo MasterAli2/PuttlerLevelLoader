@@ -31,5 +31,7 @@ public class BaseLevelObject : MonoBehaviour
     public virtual void OnEditorSelectMain(){}
     public virtual void OnEditorUnSelectMain(){}
     public virtual void OnEditorUpdate(){}
+
+    public virtual BaseSelectableObject.Abilities GetAbilities() { return BaseSelectableObject.Abilities.Default; }
     
 }

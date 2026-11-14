@@ -6,6 +6,25 @@ using UnityEngine;
 
 public class BaseSelectableObject : MonoBehaviour
 {
+    [Flags]
+    public enum Abilities
+    {
+        None = 0,
+        canMove = 1 << 0,
+        canRotate = 1 << 1,
+        canScale = 1 << 2,
+        canRect = 1 << 3,
+
+
+        // wheter or not editor tools such as move, rotate, scale and rect should be handled 
+        // by the normal logic or it should passed to the object to handle
+        // not currently implemented 
+        relayEditorTools = 1 << 4,
+
+        
+        All = canMove | canRotate | canScale | canRect | relayEditorTools,
+        Default = canMove | canRotate | canScale | canRect 
+    }
     public BaseSelectableObject(IntPtr ptr) : base(ptr) {}
 
     public BaseLevelObject baseLevelObject;
@@ -43,6 +62,8 @@ public class BaseSelectableObject : MonoBehaviour
     public virtual void OnEditorSelectMain(){ baseLevelObject.OnEditorSelectMain(); }
     public virtual void OnEditorUnSelectMain(){ baseLevelObject.OnEditorUnSelectMain(); }
     public virtual void OnEditorUpdate(){ baseLevelObject.OnEditorUpdate(); }
+
+    public virtual BaseSelectableObject.Abilities GetAbilities() { return baseLevelObject.GetAbilities(); }
     
 }
 

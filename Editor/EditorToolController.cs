@@ -133,6 +133,15 @@ class EditorToolController : MonoBehaviour
         if (!EditorManager.Instance.isActive ||EditorManager.Instance.mainSelectedObject == null)
             return;
 
+        BaseSelectableObject.Abilities abilities = EditorManager.Instance.mainSelectedObject.GetAbilities();
+
+        if ((mode == 1 && (abilities & BaseSelectableObject.Abilities.canMove) == 0) ||
+            (mode == 2 && (abilities & BaseSelectableObject.Abilities.canRotate) == 0) ||
+            (mode == 3 && (abilities & BaseSelectableObject.Abilities.canScale) == 0))
+        {
+            return;
+        }
+
         if (mode == 1)
         {
             moveToolObj.SetActive(true);

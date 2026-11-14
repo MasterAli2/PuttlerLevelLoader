@@ -11,4 +11,8 @@ public class VanillaPortalLevelObject : BaseLevelObject
 
     public VanillaPortalLevelObject(IntPtr ptr) : base(ptr) {}
 
+    public override BaseSelectableObject.Abilities GetAbilities()
+    {
+        return BaseSelectableObject.Abilities.canMove;
+    }
 }

@@ -9,5 +9,8 @@ public class VanillaBlackholeLevelObject : BaseLevelObject
 
     public VanillaBlackholeLevelObject(IntPtr ptr) : base(ptr) {}
 
-
+    public override BaseSelectableObject.Abilities GetAbilities()
+    {
+        return BaseSelectableObject.Abilities.canMove;
+    }
 }
