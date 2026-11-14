@@ -51,30 +51,6 @@ public class VanillaPortalLevelObjectDefinition : LevelObjectDefinition
         return baseLevelObject;
     }
 
-    public override void ApplyEditorPlaceButtons(GameObject gameObject)
-    {
-        Image outerImage = gameObject.transform.GetChild(0).GetComponent<Image>();
-
-        GameObject innerObj = GameObject.Instantiate(outerImage.gameObject, outerImage.transform.parent);
-        Image innerImage = innerObj.GetComponent<Image>();
-
-        outerImage.sprite = Utils.RuntimeSprite.circle;
-        outerImage.color = new Color(0, 155, 255, 255);
-
-        
-
-
-        innerImage.sprite = Utils.RuntimeSprite.circle;
-        innerImage.color = Color.black;
-
-        RectTransform innerRectTransform = outerImage.rectTransform;
-        innerRectTransform.localScale = new Vector3(innerRectTransform.localScale.x, innerRectTransform.localScale.y, innerRectTransform.localScale.z);
-        RectTransform outerRectTransform = outerImage.rectTransform;
-        outerRectTransform.localScale = new Vector3(outerRectTransform.localScale.x*1.25f, outerRectTransform.localScale.y*1.25f, outerRectTransform.localScale.z);
-    
-
-    }
-
     public override void CleanScene()
     {
         prefab = GameObject.Find("Portal");

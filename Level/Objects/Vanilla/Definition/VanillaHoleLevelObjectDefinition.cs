@@ -19,11 +19,6 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
         
     }
 
-    public override void ApplyEditorPlaceButtons(GameObject gameObject)
-    {
-        // nothing
-    }
-
     public override void CleanScene()
     {
         if (sprite == null)

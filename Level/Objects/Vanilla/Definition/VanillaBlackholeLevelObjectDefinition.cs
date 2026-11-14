@@ -33,32 +33,6 @@ public class VanillaBlackholeLevelObjectDefinition : LevelObjectDefinition
 
         return baseLevelObject;
     }
-    
-
-    public override void ApplyEditorPlaceButtons(GameObject gameObject)
-    {
-        Image innerImager = gameObject.transform.GetChild(0).GetComponent<Image>();
-
-        GameObject outerObj = GameObject.Instantiate(innerImager.gameObject, innerImager.transform.parent);
-        Image outerImage = outerObj.GetComponent<Image>();
-
-        innerImager.sprite = Utils.RuntimeSprite.circle;
-        innerImager.color = Color.black;
-
-        
-
-
-        outerImage.sprite = Utils.RuntimeSprite.circle;
-        outerImage.color = new Color(155, 0, 255, 255);;
-
-
-        RectTransform outerRectTransform = outerImage.rectTransform;
-        outerRectTransform.localScale = new Vector3(outerRectTransform.localScale.x * 0.75f, outerRectTransform.localScale.y * 0.75f, outerRectTransform.localScale.z);
-        RectTransform innerRectTransform = innerImager.rectTransform;
-        innerRectTransform.localScale = new Vector3(innerRectTransform.localScale.x, innerRectTransform.localScale.y, innerRectTransform.localScale.z);
-    
-
-    }
 
     public override void CleanScene()
     {

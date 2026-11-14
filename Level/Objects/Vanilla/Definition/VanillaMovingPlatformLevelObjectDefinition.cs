@@ -87,18 +87,6 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         return baseLevelObject;
     }
 
-    public override void ApplyEditorPlaceButtons(GameObject gameObject)
-    {
-        Image image = gameObject.transform.GetChild(0).GetComponent<Image>();
-
-        image.sprite = Utils.RuntimeSprite.square;
-        image.color = new Color(255, 0, 155, 255);
-
-        RectTransform rectTransform = image.rectTransform;
-
-
-        rectTransform.localScale = new Vector3(rectTransform.localScale.x*2f, rectTransform.localScale.y*0.2f, rectTransform.localScale.z);
-    }
 
     public override void CleanScene()
     {

@@ -28,15 +28,6 @@ public class VanillaSurfaceBlockLevelObjectDefinition : LevelObjectDefinition
         return baseLevelObject;
         
     }
-
-    public override void ApplyEditorPlaceButtons(GameObject gameObject)
-    {
-        Image image = gameObject.transform.GetChild(0).GetComponent<Image>();
-
-        image.sprite = Utils.RuntimeSprite.square;
-        image.color = Color.black;
-    }
-
     public override void CleanScene()
     {
         Transform rootHoleComps = GameObject.Find("Hole Components").transform;
