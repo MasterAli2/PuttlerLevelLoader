@@ -113,6 +113,13 @@ public static class BundleManager
             return getSpriteFromMainBundleOrNull("UI/extra_sign");
         }
     }
+    public static Sprite? ExitButtonSprite
+    {
+        get
+        {
+            return getSpriteFromMainBundleOrNull("Sprites/Exit Icon");
+        }
+    }
 
     private static GameObject? getGameobjectFromMainBundleOrNull(string name)
     {

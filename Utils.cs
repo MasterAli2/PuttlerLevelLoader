@@ -265,4 +265,15 @@ public static class Utils
         }
     }
 
+    public static void jumpToEndOfAnim(Animation anim, string name)
+    {
+        anim.Play(name);
+
+        AnimationState state = anim[name];
+
+        state.normalizedTime = 1.0f;
+
+        anim.Sample();
+    }
+
 }

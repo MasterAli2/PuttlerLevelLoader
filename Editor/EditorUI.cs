@@ -1,4 +1,5 @@
 using Il2Cpp;
+using Il2CppTMPro;
 using MelonLoader;
 using puttlerLevelLoader;
 using UnityEngine;
@@ -9,6 +10,8 @@ using UnityEngine.UI;
 public class EditorUI : MonoBehaviour
 {
     public EditorUI(IntPtr ptr) : base(ptr) {}
+
+    public static bool exitedEditor = false;
 
     public GameObject? editorButtons1;
     public GameObject? mainCanvas;
@@ -24,9 +27,35 @@ public class EditorUI : MonoBehaviour
         removeDefaultCameraMovement();
         setupSwitchButton();
         setupEditorButtons();
+        setupExitButton();
+
 
         doLeftBar();
         doTopBar();
+    }
+    
+    void setupExitButton()
+    {
+        Image ExitButtonImage = GameObject.Find("World Toggle").transform.GetChild(0).GetComponent<Image>();
+        ExitButtonImage.sprite = BundleManager.ExitButtonSprite;
+
+        MelonLogger.Msg(ExitButtonImage.sprite.name);
+
+        Transform world_popup = GameObject.Find("World Components").transform.GetChild(0).GetChild(1).GetChild(2);
+
+        var exitLabel = world_popup.GetChild(0).GetComponent<TextMeshProUGUI>();
+        exitLabel.text = "Exit";
+
+        var confirmationText = world_popup.GetChild(2).GetComponent<TextMeshProUGUI>();
+        confirmationText.text = "Are you sure you would like to exit? Unsaved data may be lost.";
+        confirmationText.enableAutoSizing = true;
+
+        var confirmButton = world_popup.GetChild(3).GetChild(1).GetComponent<Button>();
+        confirmButton.onClick = new Button.ButtonClickedEvent();
+        confirmButton.onClick.AddListener((System.Action)(() => {
+            EditorUI.exitedEditor = true;
+            FindObjectOfType<LevelChanger>().FadeToLevel("Menu");
+        }));
     }
 
     void doLeftBar()

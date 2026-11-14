@@ -24,6 +24,17 @@ static class MainMenu
         setupExtraButton();
         setupExtrasMenu();
         setupEditorMenu();
+
+        doEditorExit();
+    }
+    static void doEditorExit()
+    {
+        if (EditorUI.exitedEditor)
+        {
+            EditorUI.exitedEditor = false;
+
+            Utils.jumpToEndOfAnim(mainStartAnimation._animation, BundleManager.ExtraMenuGoEditor.name);
+        }
     }
     static void setupExtrasMenu()
     {
