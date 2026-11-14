@@ -37,6 +37,18 @@ class EditorCamera : MonoBehaviour
     void Update()
     {
         float scroll = -Input.mouseScrollDelta.y;
+
+        var aa = 15f;
+        if (Input.GetKey(KeyCode.KeypadPlus))
+        {
+            scroll = aa * Time.deltaTime;
+        }
+        else if (Input.GetKey(KeyCode.KeypadMinus))
+        {
+            scroll = -aa * Time.deltaTime;
+            
+        }
+
         if (scroll != 0 && EditorToolController.Instance && !EditorToolController.Instance.movingObject)
         {
             var a = cam.ScreenToWorldPoint(Input.mousePosition);
@@ -45,7 +57,6 @@ class EditorCamera : MonoBehaviour
 
             var b = cam.ScreenToWorldPoint(Input.mousePosition);
 
-            MelonLogger.Msg(a==b);
 
             Vector2 difference = a - b;
             Vector3 newPosition = cam.transform.position + (Vector3)difference;
