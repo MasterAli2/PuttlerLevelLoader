@@ -14,6 +14,8 @@ static class MainMenu
     static StartAnimation mainStartAnimation;
 
     static GameObject extras_menu_obj;
+
+    static int chosenEditLevelIndex = -1;
     public static void onSceneLoaded(string sceneName)
     {
         if (sceneName != "Menu") return;
@@ -23,7 +25,8 @@ static class MainMenu
 
         setupExtraButton();
         setupExtrasMenu();
-        setupEditorMenu();
+        setupLocalMenu();
+        setupEditMenu();
 
         doEditorExit();
     }
@@ -95,8 +98,41 @@ static class MainMenu
         }));
         
     }
+    public static void setupEditMenu()
+    {
+        Transform root = extras_menu_obj.transform.GetChild(2).GetChild(2).GetChild(0);
 
-    public static void setupEditorMenu()
+        
+
+        Button backButton = extras_menu_obj.transform.GetChild(2).GetChild(1).GetComponent<Button>();
+
+        mainStartAnimation._animation.AddClip(BundleManager.ExtraMenuEditGoLocal, BundleManager.ExtraMenuEditGoLocal.name);
+        StartAnimation startAnimation = backButton.gameObject.AddComponent<StartAnimation>();
+        startAnimation.animationName = BundleManager.ExtraMenuEditGoLocal.name;
+        startAnimation._animation = mainStartAnimation._animation;
+
+        backButton.onClick = new Button.ButtonClickedEvent();
+        backButton.onClick.AddListener((System.Action)(() => {
+            Utils.TryPlayAnim(startAnimation);
+        }));
+        
+        Button openEditorButton = root.GetChild(3).GetComponent<Button>();
+        openEditorButton.onClick = new Button.ButtonClickedEvent();
+        openEditorButton.onClick.AddListener((System.Action)(() => {
+            // open current level as editor here
+            LevelManager.openCustomLevel(chosenEditLevelIndex, true);
+        }));
+
+        Button saveCurrentMetaStuffButton = root.GetChild(4).GetComponent<Button>();
+        saveCurrentMetaStuffButton.onClick = new Button.ButtonClickedEvent();
+        saveCurrentMetaStuffButton.onClick.AddListener((System.Action)(() => {
+            // save stuff here idk
+            MelonLogger.Msg("Save Stuff");
+        }));
+
+
+    }
+    public static void setupLocalMenu()
     {
 
         GameObject back_button = extras_menu_obj.transform.GetChild(1).Find("Back Button (PLL)").gameObject;
@@ -118,12 +154,25 @@ static class MainMenu
 
 
 
+        
+        refreshLocalMenu();
+
+    }
+
+    public static void refreshLocalMenu()
+    {
         LocalData.init();
 
 
         GameObject localLevelsContentRoot = extras_menu_obj.transform.GetChild(1).GetChild(4).GetChild(0).GetChild(0).GetChild(0).gameObject;
 
         GameObject baseLLButton = localLevelsContentRoot.transform.GetChild(0).gameObject;
+
+        for (int i = localLevelsContentRoot.transform.childCount; i > 1; i--)
+        {
+            GameObject.Destroy(localLevelsContentRoot.transform.GetChild(i - 1).gameObject);
+        }
+
         baseLLButton.SetActive(false);
         if (LocalData.customLevels == null)
         {
@@ -131,6 +180,10 @@ static class MainMenu
             baseLLButton.GetComponentInChildren<Text>().text = "An error occured while loading the levels";
             return;
         }
+
+        mainStartAnimation._animation.AddClip(BundleManager.ExtraMenuLocalGoEdit, BundleManager.ExtraMenuLocalGoEdit.name);
+
+
         for (int i = 0; i < LocalData.customLevels.Count; i++)
         {
             GameObject obj = GameObject.Instantiate(baseLLButton, baseLLButton.transform.parent);
@@ -146,9 +199,17 @@ static class MainMenu
             {
                 LevelManager.openCustomLevel(index);
             }));
-        }
-    
 
+            StartAnimation startAnimation1 = obj.transform.GetChild(3).gameObject.AddComponent<StartAnimation>();
+            startAnimation1.animationName = BundleManager.ExtraMenuLocalGoEdit.name;
+            startAnimation1._animation = mainStartAnimation._animation;
+
+            obj.transform.GetChild(3).GetComponent<Button>().onClick.AddListener((System.Action)(() =>
+            {
+                chosenEditLevelIndex = index;
+                Utils.TryPlayAnim(startAnimation1);
+            }));
+        }
     }
 
     public static void setupExtraButton()

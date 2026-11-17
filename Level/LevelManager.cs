@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Harmony;
 using MelonLoader;
 using MelonLoader.TinyJSON;
@@ -9,16 +10,19 @@ public class LevelManager : MonoBehaviour
 {
     public LevelManager(IntPtr ptr) : base(ptr) {}
     public static CustomLevel? currentLevel;
+    public static bool asEditor = false;
     public static int levelIndex;
     public static List<BaseLevelObject>? currentLevelObjs;
 
     public static bool inCustomLevel;
-    public static void openCustomLevel(int levelIndex)
+    public static void openCustomLevel(int levelIndex, bool asEditor = false)
     {
         currentLevel = LocalData.customLevels[levelIndex];
 
         LevelManager.levelIndex = levelIndex;
         inCustomLevel = true;
+
+        LevelManager.asEditor = asEditor;
 
         GameSceneManager.nextGameSceneLoadTarget = 1;
 
@@ -40,6 +44,11 @@ public class LevelManager : MonoBehaviour
         LevelBuilder.setMetadata(currentLevel);
 
         inCustomLevel = true;
+
+        if (asEditor)
+        {
+            (new GameObject("Editor Manager")).AddComponent<EditorManager>();
+        }
 
         GameObject managerObj = new GameObject("Level Manager");
         managerObj.AddComponent<LevelManager>();

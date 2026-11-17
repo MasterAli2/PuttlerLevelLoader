@@ -76,7 +76,7 @@ public static class LevelBuilder
 
         }
 
-        (new GameObject("fish editor")).AddComponent<EditorManager>();
+        
         return result;
 
 

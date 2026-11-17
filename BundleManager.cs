@@ -103,6 +103,20 @@ public static class BundleManager
             return getAnimFromMainBundleOrNull("UI/ExtraAnims/EditorGoMain");
         }
     }
+    public static AnimationClip? ExtraMenuLocalGoEdit
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraAnims/LocalGoEdit");
+        }
+    }
+    public static AnimationClip? ExtraMenuEditGoLocal
+    {
+        get
+        {
+            return getAnimFromMainBundleOrNull("UI/ExtraAnims/EditGoLocal");
+        }
+    }
 
 
     public static GameObject? ExtrasMenuPrefab
