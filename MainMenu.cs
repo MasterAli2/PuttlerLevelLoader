@@ -15,7 +15,7 @@ static class MainMenu
 
     static GameObject extras_menu_obj;
 
-    static int chosenEditLevelIndex = -1;
+    static string chosenEditLevelId = "";
     public static void onSceneLoaded(string sceneName)
     {
         if (sceneName != "Menu") return;
@@ -120,7 +120,7 @@ static class MainMenu
         openEditorButton.onClick = new Button.ButtonClickedEvent();
         openEditorButton.onClick.AddListener((System.Action)(() => {
             // open current level as editor here
-            LevelManager.openCustomLevel(chosenEditLevelIndex, true);
+            LevelManager.openCustomLevel(chosenEditLevelId, true);
         }));
 
         Button saveCurrentMetaStuffButton = root.GetChild(4).GetComponent<Button>();
@@ -174,7 +174,7 @@ static class MainMenu
         }
 
         baseLLButton.SetActive(false);
-        if (LocalData.customLevels == null)
+        if (LocalData.localLevels == null)
         {
             baseLLButton.SetActive(true);
             baseLLButton.GetComponentInChildren<Text>().text = "An error occured while loading the levels";
@@ -184,20 +184,22 @@ static class MainMenu
         mainStartAnimation._animation.AddClip(BundleManager.ExtraMenuLocalGoEdit, BundleManager.ExtraMenuLocalGoEdit.name);
 
 
-        for (int i = 0; i < LocalData.customLevels.Count; i++)
+        for (int i = 0; i < LocalData.localLevels.Count; i++)
         {
             GameObject obj = GameObject.Instantiate(baseLLButton, baseLLButton.transform.parent);
             obj.SetActive(true);
 
             Utils.expandOnHoverObj(obj, 1.005f, 0.05f);
 
-            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = LocalData.customLevels[i].name;
+            var localLevel = LocalData.localLevels.ElementAt(i);
+            obj.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = localLevel.Value.name;
 
-            int index = i; // important fix
+            // important fix
+            string levelId = localLevel.Key;
 
             obj.transform.GetChild(0).GetComponent<Button>().onClick.AddListener((System.Action)(() =>
             {
-                LevelManager.openCustomLevel(index);
+                LevelManager.openCustomLevel(levelId);
             }));
 
             StartAnimation startAnimation1 = obj.transform.GetChild(3).gameObject.AddComponent<StartAnimation>();
@@ -206,7 +208,7 @@ static class MainMenu
 
             obj.transform.GetChild(3).GetComponent<Button>().onClick.AddListener((System.Action)(() =>
             {
-                chosenEditLevelIndex = index;
+                chosenEditLevelId = levelId;
                 Utils.TryPlayAnim(startAnimation1);
             }));
         }

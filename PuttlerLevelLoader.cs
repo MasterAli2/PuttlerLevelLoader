@@ -34,7 +34,7 @@ public class PuttlerLevelLoader : MelonMod
         
         MainMenu.onSceneLoaded(sceneName);
         
-        LevelsMenu.onSceneLoaded(sceneName);
+        //LevelsMenu.onSceneLoaded(sceneName);
     }
 
     private void RegisterInIl2Cpp(){

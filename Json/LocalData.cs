@@ -8,7 +8,8 @@ static class LocalData
 {
     public static string dataPath = Path.Combine(MelonEnvironment.MelonBaseDirectory, "PeakLevelLoader/");
     public static string localLevelsPath = Path.Combine(dataPath, "LocalLevels/");
-    public static List<CustomLevel> customLevels = new List<CustomLevel>();
+    //public static List<CustomLevel> customLevels = new List<CustomLevel>();
+    public static Dictionary<string, CustomLevel> localLevels = new Dictionary<string, CustomLevel>();
 
     public static void init()
     {
@@ -19,7 +20,7 @@ static class LocalData
     {
         Directory.CreateDirectory(localLevelsPath);
 
-        customLevels = new List<CustomLevel>();
+        localLevels = new Dictionary<string, CustomLevel>();
         var files = Directory
             .GetFiles(localLevelsPath, "*.json")
             .OrderBy(f => File.GetLastWriteTime(f))
@@ -38,8 +39,7 @@ static class LocalData
 
                 if (level != null)
                 {
-
-                    customLevels.Add(level);
+                    localLevels.Add(file, level);
                 }
             }
             catch

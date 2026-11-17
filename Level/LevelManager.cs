@@ -11,15 +11,15 @@ public class LevelManager : MonoBehaviour
     public LevelManager(IntPtr ptr) : base(ptr) {}
     public static CustomLevel? currentLevel;
     public static bool asEditor = false;
-    public static int levelIndex;
+    public static string levelId;
     public static List<BaseLevelObject>? currentLevelObjs;
 
     public static bool inCustomLevel;
-    public static void openCustomLevel(int levelIndex, bool asEditor = false)
+    public static void openCustomLevel(string levelId, bool asEditor = false)
     {
-        currentLevel = LocalData.customLevels[levelIndex];
+        currentLevel = LocalData.localLevels[levelId];
 
-        LevelManager.levelIndex = levelIndex;
+        LevelManager.levelId = levelId;
         inCustomLevel = true;
 
         LevelManager.asEditor = asEditor;
@@ -57,7 +57,7 @@ public class LevelManager : MonoBehaviour
     public static void OnDestroy()
     {
         currentLevel = null;
-        levelIndex = -1;
+        levelId = "";
         inCustomLevel = false;
 
         MelonLogger.Msg("OnDestroy() LevelManager");
@@ -70,12 +70,12 @@ public class LevelManager : MonoBehaviour
             LocalData.init();
             CustomLevel? level;
 
-            if (levelIndex < 0 || levelIndex >= LocalData.customLevels.Count)
+            if (levelId == "")
             {
                 return;
             }
 
-            level = LocalData.customLevels[levelIndex];
+            level = LocalData.localLevels[levelId];
             
 
             if (currentLevelObjs != null)
