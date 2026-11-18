@@ -10,7 +10,7 @@ public class CustomLevel
     public int par;
     public float ballX;
     public float ballY;
-    public List<SerialLevelObject> levelObjects;
+    public List<SerialLevelObject> levelObjects = new();
 
     public string ToJson()
     {

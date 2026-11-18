@@ -4,6 +4,8 @@ using System;
 using System.IO;
 using System.Text.Json;
 
+using UnityEngine;
+
 static class LocalData
 {
     public static string dataPath = Path.Combine(MelonEnvironment.MelonBaseDirectory, "PeakLevelLoader/");
@@ -42,11 +44,48 @@ static class LocalData
                     localLevels.Add(file, level);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                MelonLogger.Error($"Error loading local level {file}");
+                MelonLogger.Error($"Error loading local level {file}: {ex}");
             }
         }
 
+    }
+
+    public static void createNewEmptyLocalLevel()
+    {
+        LocalData.reloadLocalLevels();
+
+        CustomLevel customLevel = new CustomLevel();
+
+        string baseName = "New Level";
+        string name = baseName;
+        int suffix = 1;
+
+        while (localLevels.Values.Any(level => level.name == name))
+        {
+            name = $"{baseName} ({suffix})";
+            suffix++;
+        }
+
+        customLevel.name = name;
+        customLevel.par = 3;
+
+        customLevel.ballX = 0;
+        customLevel.ballY = 5;
+
+        SerialLevelObject goal = new SerialLevelObject();
+        goal.type = "hole";
+
+        goal.data["pos"] = Vec3D.toJson(new Vector3(0, -3, 0));
+        goal.data["rot"] = JsonSerializer.SerializeToElement(0f);
+        goal.data["size"] = Vec3D.toJson(new Vector3(1, 1, 5));
+
+        customLevel.levelObjects.Add(goal);
+
+        // generate random file name
+        string fileName = $"{Guid.NewGuid()}.json";
+
+        File.WriteAllText(Path.Combine(localLevelsPath, fileName), customLevel.ToJson());
     }
 }

@@ -153,8 +153,14 @@ static class MainMenu
         }));
 
 
+        Button newLevelButton = extras_menu_obj.transform.GetChild(1).Find("New Button (PLL)").GetComponent<Button>();
+        newLevelButton.interactable = true;
+        newLevelButton.onClick = new Button.ButtonClickedEvent();
+        newLevelButton.onClick.AddListener((System.Action)(() => {
+            LocalData.createNewEmptyLocalLevel();
+            refreshLocalMenu();
+        }));
 
-        
         refreshLocalMenu();
 
     }
@@ -184,7 +190,7 @@ static class MainMenu
         mainStartAnimation._animation.AddClip(BundleManager.ExtraMenuLocalGoEdit, BundleManager.ExtraMenuLocalGoEdit.name);
 
 
-        for (int i = 0; i < LocalData.localLevels.Count; i++)
+        for (int i = LocalData.localLevels.Count - 1; i >= 0; i--)
         {
             GameObject obj = GameObject.Instantiate(baseLLButton, baseLLButton.transform.parent);
             obj.SetActive(true);
