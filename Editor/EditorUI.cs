@@ -32,6 +32,7 @@ public class EditorUI : MonoBehaviour
         doLeftBar();
         doTopBar();
         setupEditorButtons();
+        doSaveButton();
 
     }
     
@@ -103,7 +104,23 @@ public class EditorUI : MonoBehaviour
             }));
         
 
-        MelonLogger.Msg(topBar.transform.GetChild(0).GetComponent<Button>().name);
+    }
+    void doSaveButton()
+    {
+        if (BundleManager.saveBarPrefab == null)
+        {
+            return;
+        }
+
+        GameObject saveButtonObj = GameObject.Instantiate(BundleManager.saveBarPrefab, GameObject.Find("Main Button Toggle ").transform);
+
+        Button saveButton = saveButtonObj.GetComponent<Button>();
+        saveButton.onClick = new Button.ButtonClickedEvent();
+        saveButton.onClick.AddListener((System.Action)(() =>
+        {
+            MelonLogger.Msg("Saved Clicked");
+        }));
+        
     }
 
     void removeDefaultCameraMovement()

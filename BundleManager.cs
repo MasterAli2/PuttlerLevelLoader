@@ -38,6 +38,13 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("bottombar");
         }
     }
+    public static GameObject? saveBarPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("savebar");
+        }
+    }
     public static GameObject? topBarPrefab
     {
         get
