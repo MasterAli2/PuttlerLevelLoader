@@ -29,6 +29,11 @@ public class SerialLevelObject
     public string type;
     public Dictionary<string, JsonElement> data = new();
 
+    public SerialLevelObject(string type = "")
+    {
+        this.type = type;
+    }
+
     public string ToJson()
     {
         return JsonSerializer.Serialize<SerialLevelObject>(this, Constants.jsonSerializerOptions);

@@ -40,6 +40,8 @@ public class EditorPlacer : MonoBehaviour
         }
         firstPlacingObjects = placingObjects[0];
 
+        LevelManager.currentLevelObjs?.Add(mainPlacingObject);
+
         isPlacing = true;
         pressed_down =false;
 

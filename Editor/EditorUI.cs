@@ -41,8 +41,6 @@ public class EditorUI : MonoBehaviour
         Image ExitButtonImage = GameObject.Find("World Toggle").transform.GetChild(0).GetComponent<Image>();
         ExitButtonImage.sprite = BundleManager.ExitButtonSprite;
 
-        MelonLogger.Msg(ExitButtonImage.sprite.name);
-
         Transform world_popup = GameObject.Find("World Components").transform.GetChild(0).GetChild(1).GetChild(2);
 
         var exitLabel = world_popup.GetChild(0).GetComponent<TextMeshProUGUI>();
@@ -76,8 +74,6 @@ public class EditorUI : MonoBehaviour
         
         leftBar.transform.GetChild(2).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
         leftBar.transform.GetChild(2).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(3);}));
-
-        MelonLogger.Msg(leftBar.transform.GetChild(0).GetComponent<Button>().name);
     }
 
     void doTopBar()
@@ -119,6 +115,7 @@ public class EditorUI : MonoBehaviour
         saveButton.onClick.AddListener((System.Action)(() =>
         {
             MelonLogger.Msg("Saved Clicked");
+            EditorManager.SaveEditorAsIs();
         }));
         
     }
@@ -132,8 +129,6 @@ public class EditorUI : MonoBehaviour
     }
     void setupSwitchButton()
     {
-        MelonLogger.Msg(mainButtonHolder.transform.name);
-        MelonLogger.Msg(mainButtonHolder.transform.parent.name);
         GameObject a = mainButtonHolder.transform.parent.GetChild(3)
         .GetChild(1)
         .GetChild(1)

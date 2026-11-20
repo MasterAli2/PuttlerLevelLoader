@@ -193,6 +193,10 @@ class EditorToolController : MonoBehaviour
         bool down = Input.GetKeyDown(KeyCode.T);
         if (down && EditorManager.Instance.mainSelectedObject != null)
         {
+            if (LevelManager.currentLevelObjs.Contains(EditorManager.Instance.mainSelectedObject.baseLevelObject))
+            {
+                LevelManager.currentLevelObjs.Remove(EditorManager.Instance.mainSelectedObject.baseLevelObject);
+            }
             EditorManager.Instance.mainSelectedObject.Trash();
         }
     }

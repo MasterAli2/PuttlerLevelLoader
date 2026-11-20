@@ -19,7 +19,7 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         GameObject obj = placeMovingPlatform(
             Vec3D.fromJson(serialLevelObject.data["start"]),
             Vec3D.fromJson(serialLevelObject.data["end"]),
-            serialLevelObject.data["rot"].GetSingle());
+            0f);
 
         BaseLevelObject baseLevelObject = obj.AddComponent<VanillaMovingPlatformLevelObject>();
 
@@ -48,14 +48,11 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         pointASP.transform.localScale = Vector3.one*.1f;
         pointBSP.transform.localScale = Vector3.one*.1f;
 
+        pointASP.transform.localPosition = Vector3.zero;
+        pointBSP.transform.localPosition = Vector3.zero;
+
         pointA.transform.localScale = Vector3.one;
         pointB.transform.localScale = Vector3.one;
-
-        BoxCollider2D pointABX = pointA.AddComponent<BoxCollider2D>();
-        BoxCollider2D pointBBX = pointB.AddComponent<BoxCollider2D>();
-
-        pointABX.isTrigger = true;
-        pointBBX.isTrigger = true;
 
         pointA.AddComponent<BaseSelectableObject>();
         pointB.AddComponent<BaseSelectableObject>();
@@ -82,6 +79,7 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
         movingPlatform.startPosition = pointA.transform.position;
         shadowMovingPlatform.startPosition = pointA.transform.position;
         
+        pointA.transform.eulerAngles = new Vector3(0f, 0f, serialLevelObject.data["rot"].GetSingle());
 
 
         return baseLevelObject;
@@ -157,10 +155,10 @@ public class VanillaMovingPlatformLevelObjectDefinition : LevelObjectDefinition
 
 
         movingPlatform.position = start;
-        movingPlatform.eulerAngles = new Vector3(0f, 0f, rotation);
+        //movingPlatform.eulerAngles = new Vector3(0f, 0f, rotation);
 
         shadowMovingPlatform.position = start;
-        shadowMovingPlatform.eulerAngles = new Vector3(0f, 0f, rotation);
+        //shadowMovingPlatform.eulerAngles = new Vector3(0f, 0f, rotation);
 
         /*
         Utils.InvokeMethod(originalMovingPlatform, "Start");

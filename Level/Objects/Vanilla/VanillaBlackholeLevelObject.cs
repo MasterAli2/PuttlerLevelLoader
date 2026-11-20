@@ -13,4 +13,13 @@ public class VanillaBlackholeLevelObject : BaseLevelObject
     {
         return BaseSelectableObject.Abilities.canMove;
     }
+
+    public override SerialLevelObject SerializeObject()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject("blackhole");
+
+        serialLevelObject.data["pos"] = Vec3D.toJson(transform.position);
+
+        return serialLevelObject;
+    }
 }

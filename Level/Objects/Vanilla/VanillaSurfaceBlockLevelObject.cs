@@ -10,4 +10,14 @@ public class VanillaSurfaceBlockLevelObject : BaseLevelObject
     
     public VanillaSurfaceBlockLevelObject(IntPtr ptr) : base(ptr) {}
 
+    public override SerialLevelObject SerializeObject()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject("block");
+
+        serialLevelObject.data["pos"] = Vec3D.toJson(transform.position);
+        serialLevelObject.data["size"] = Vec3D.toJson(transform.localScale);
+        serialLevelObject.data["rot"] = JsonSerializer.SerializeToElement(transform.eulerAngles.z);
+
+        return serialLevelObject;
+    }
 }

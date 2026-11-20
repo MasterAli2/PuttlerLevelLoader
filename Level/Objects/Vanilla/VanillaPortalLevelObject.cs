@@ -15,4 +15,14 @@ public class VanillaPortalLevelObject : BaseLevelObject
     {
         return BaseSelectableObject.Abilities.canMove;
     }
+
+    public override SerialLevelObject SerializeObject()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject("portal");
+
+        serialLevelObject.data["entry"] = Vec3D.toJson(transform.GetChild(0).position);
+        serialLevelObject.data["exit"] = Vec3D.toJson(transform.GetChild(1).position);
+
+        return serialLevelObject;
+    }
 }

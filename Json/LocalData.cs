@@ -88,4 +88,9 @@ static class LocalData
 
         File.WriteAllText(Path.Combine(localLevelsPath, fileName), customLevel.ToJson());
     }
+
+    public static void saveLocalLevel(string levelId, CustomLevel customLevel)
+    {
+        File.WriteAllText(Path.Combine(localLevelsPath, levelId), customLevel.ToJson());
+    }
 }

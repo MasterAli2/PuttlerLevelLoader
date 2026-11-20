@@ -38,6 +38,8 @@ public class EditorManager : MonoBehaviour
 
     public bool refFrameGlobal = true;
 
+    public static LevelManager levelManager;
+
     public EditorManager(IntPtr ptr) : base(ptr) {}
 
     void Awake()
@@ -46,6 +48,8 @@ public class EditorManager : MonoBehaviour
         {
             Instance = this;
         }
+
+        levelManager = GetComponent<LevelManager>();
 
         gameObject.AddComponent<EditorUI>();
         gameObject.AddComponent<EditorToolController>();
@@ -134,5 +138,27 @@ public class EditorManager : MonoBehaviour
         {
             Instance = null;
         }
+    }
+
+    public static void SaveEditorAsIs()
+    {
+        CustomLevel customLevel = LevelManager.currentLevel;
+
+        customLevel.levelObjects = new();
+
+        foreach (var obj in LevelManager.currentLevelObjs)
+        {
+
+            try
+            {
+                customLevel.levelObjects.Add(obj.SerializeObject()); 
+            }
+            catch (Exception e)
+            {
+                MelonLogger.Error($"Error while saving {obj.GetType()}: {e}");
+            }
+        }
+
+        LocalData.saveLocalLevel(LevelManager.levelId, customLevel);
     }
 }

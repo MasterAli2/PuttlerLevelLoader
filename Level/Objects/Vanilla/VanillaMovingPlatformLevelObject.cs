@@ -1,5 +1,6 @@
 
 using System;
+using System.Text.Json;
 using Il2Cpp;
 using MelonLoader;
 using UnityEngine;
@@ -47,6 +48,17 @@ public class VanillaMovingPlatformLevelObject : BaseLevelObject
             movingPlatform.targetPosition = pointB.position;
             //movingShadowPlatform.targetPosition = pointB.position;
         }
+    }
+
+    public override SerialLevelObject SerializeObject()
+    {
+        SerialLevelObject serialLevelObject = new SerialLevelObject("moving platform");
+
+        serialLevelObject.data["start"] = Vec3D.toJson(transform.GetChild(0).position);
+        serialLevelObject.data["end"] = Vec3D.toJson(transform.GetChild(1).position);
+        serialLevelObject.data["rot"] = JsonSerializer.SerializeToElement(transform.GetChild(0).eulerAngles.z);
+
+        return serialLevelObject;
     }
 }
 

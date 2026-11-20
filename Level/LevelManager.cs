@@ -45,13 +45,16 @@ public class LevelManager : MonoBehaviour
 
         inCustomLevel = true;
 
-        if (asEditor)
-        {
-            (new GameObject("Editor Manager")).AddComponent<EditorManager>();
-        }
+        
 
         GameObject managerObj = new GameObject("Level Manager");
+        
         managerObj.AddComponent<LevelManager>();
+
+        if (asEditor)
+        {
+            managerObj.AddComponent<EditorManager>();
+        }
     
     }
     public static void OnDestroy()

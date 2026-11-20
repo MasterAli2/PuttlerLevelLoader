@@ -34,4 +34,5 @@ public class BaseLevelObject : MonoBehaviour
 
     public virtual BaseSelectableObject.Abilities GetAbilities() { return BaseSelectableObject.Abilities.Default; }
     
+    public virtual SerialLevelObject SerializeObject() { throw new NotImplementedException(); }
 }

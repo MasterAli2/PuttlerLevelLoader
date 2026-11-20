@@ -61,10 +61,6 @@ public static class LevelBuilder
                 continue;
             }
 
-            if (obj.type == "moving platform")
-            {
-                continue;
-            }
 
             BaseLevelObject newObjs = LevelObjectRegistry.Registry[obj.type].Place(obj);
 
