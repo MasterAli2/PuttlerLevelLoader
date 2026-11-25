@@ -40,7 +40,7 @@ class EditorToolController : MonoBehaviour
 
     public BoxCollider2D moveToolBoundsCenter;
     public BoxCollider2D moveToolBoundsUp;
-    public BoxCollider2D moveToolBoundsDown;
+    public BoxCollider2D moveToolBoundsRight;
 
     public Vector2 moveObjOffset = Vector2.zero;
     public Vector2 moveToolOffset = Vector2.zero;
@@ -62,7 +62,7 @@ class EditorToolController : MonoBehaviour
     public GameObject scaleToolObj;
     public BoxCollider2D scaleToolBoundsCenter;
     public BoxCollider2D scaleToolBoundsUp;
-    public BoxCollider2D scaleToolBoundsDown;
+    public BoxCollider2D scaleToolBoundsRight;
 
     public Transform scaleToolUpHead;
     public Transform scaleToolRightHead;
@@ -99,10 +99,10 @@ class EditorToolController : MonoBehaviour
 
             moveToolBoundsCenter = moveToolObj.transform.GetChild(0).GetComponent<BoxCollider2D>();
             moveToolBoundsUp = moveToolObj.transform.GetChild(1).GetComponent<BoxCollider2D>();
-            moveToolBoundsDown = moveToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
+            moveToolBoundsRight = moveToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
 
             moveUpLineObj = moveToolBoundsUp.transform.GetChild(1).gameObject;
-            moveRightLineObj = moveToolBoundsDown.transform.GetChild(1).gameObject;
+            moveRightLineObj = moveToolBoundsRight.transform.GetChild(1).gameObject;
         }
 
         if (BundleManager.rotateToolPrefab != null)
@@ -121,10 +121,10 @@ class EditorToolController : MonoBehaviour
 
             scaleToolBoundsCenter = scaleToolObj.transform.GetChild(0).GetComponent<BoxCollider2D>();
             scaleToolBoundsUp = scaleToolObj.transform.GetChild(1).GetComponent<BoxCollider2D>();
-            scaleToolBoundsDown = scaleToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
+            scaleToolBoundsRight = scaleToolObj.transform.GetChild(2).GetComponent<BoxCollider2D>();
         
             scaleToolUpHead = scaleToolBoundsUp.transform.GetChild(0);
-            scaleToolRightHead = scaleToolBoundsDown.transform.GetChild(0);
+            scaleToolRightHead = scaleToolBoundsRight.transform.GetChild(0);
         
         }
     }
@@ -277,7 +277,7 @@ class EditorToolController : MonoBehaviour
             else
             {
                 Vector3 axis = moveDirection == ToolDirection.Right
-                    ? moveToolBoundsDown.transform.up
+                    ? moveToolBoundsRight.transform.up
                     : moveToolBoundsUp.transform.up;
                 axis.Normalize();
 
@@ -316,7 +316,7 @@ class EditorToolController : MonoBehaviour
                     detectedDragState = ToolDirection.Up;
                     break;
                 }
-                if (col == moveToolBoundsDown)
+                if (col == moveToolBoundsRight)
                 {
                     detectedDragState = ToolDirection.Right;
                     break;
@@ -412,11 +412,11 @@ class EditorToolController : MonoBehaviour
 
             if (scaleDirection == ToolDirection.Right || all)
             {
-                scaleToolBoundsDown.transform.localScale = 
-                new Vector3(scaleToolBoundsDown.transform.localScale.x, startScaleToolScale.x + mousePosDifference.x, scaleToolBoundsDown.transform.localScale.z);
+                scaleToolBoundsRight.transform.localScale = 
+                new Vector3(scaleToolBoundsRight.transform.localScale.x, startScaleToolScale.x + mousePosDifference.x, scaleToolBoundsRight.transform.localScale.z);
             
-                scaleToolBoundsDown.transform.localPosition = 
-                new Vector3(startScaleToolPosition.x + mousePosDifference.x / 2, scaleToolBoundsDown.transform.localPosition.y, scaleToolBoundsDown.transform.localPosition.z);
+                scaleToolBoundsRight.transform.localPosition = 
+                new Vector3(startScaleToolPosition.x + mousePosDifference.x / 2, scaleToolBoundsRight.transform.localPosition.y, scaleToolBoundsRight.transform.localPosition.z);
 
                 var headScale = scaleToolRightHead.localScale;
                 headScale.x = .2f * (startScaleToolScale.x / (startScaleToolScale.x + mousePosDifference.x));
@@ -461,7 +461,7 @@ class EditorToolController : MonoBehaviour
                     detectedDragState = ToolDirection.Up;
                     break;
                 }
-                if (col == scaleToolBoundsDown)
+                if (col == scaleToolBoundsRight)
                 {
                     detectedDragState = ToolDirection.Right;
                     break;
@@ -506,8 +506,8 @@ class EditorToolController : MonoBehaviour
 
         startMousePos = Utils.pointerWorldPos();
 
-        startScaleToolScale = new Vector2(scaleToolBoundsDown.transform.localScale.y, scaleToolBoundsUp.transform.localScale.y);
-        startScaleToolPosition = new Vector2(scaleToolBoundsDown.transform.localPosition.x, scaleToolBoundsUp.transform.localPosition.y);
+        startScaleToolScale = new Vector2(scaleToolBoundsRight.transform.localScale.y, scaleToolBoundsUp.transform.localScale.y);
+        startScaleToolPosition = new Vector2(scaleToolBoundsRight.transform.localPosition.x, scaleToolBoundsUp.transform.localPosition.y);
 
 
         //if (scaleToolObj != null)
@@ -533,10 +533,10 @@ class EditorToolController : MonoBehaviour
     void ResetScaleTool()
     {
         scaleToolBoundsUp.transform.localPosition = new Vector3(0f, 1.5f, 0f);
-        scaleToolBoundsDown.transform.localPosition = new Vector3(1.5f, 0f, 0f);
+        scaleToolBoundsRight.transform.localPosition = new Vector3(1.5f, 0f, 0f);
 
         scaleToolBoundsUp.transform.localScale = new Vector3(.2f, 3f, 1f);
-        scaleToolBoundsDown.transform.localScale = new Vector3(.2f, 3f, 1f);
+        scaleToolBoundsRight.transform.localScale = new Vector3(.2f, 3f, 1f);
 
         var upHeadScale = scaleToolUpHead.localScale;
         upHeadScale.y = 0.2f;
@@ -560,10 +560,10 @@ class EditorToolController : MonoBehaviour
     {
         return (c == moveToolBoundsCenter && moveToolBoundsCenter.isActiveAndEnabled) ||
             (c == moveToolBoundsUp && moveToolBoundsUp.isActiveAndEnabled) ||
-            (c == moveToolBoundsDown && moveToolBoundsDown.isActiveAndEnabled) ||
+            (c == moveToolBoundsRight && moveToolBoundsRight.isActiveAndEnabled) ||
             (c == rotateToolButton && rotateToolButton.isActiveAndEnabled) ||
             (c == scaleToolBoundsCenter && scaleToolBoundsCenter.isActiveAndEnabled) ||
             (c == scaleToolBoundsUp && scaleToolBoundsUp.isActiveAndEnabled) ||
-            (c == scaleToolBoundsDown && scaleToolBoundsDown.isActiveAndEnabled);
+            (c == scaleToolBoundsRight && scaleToolBoundsRight.isActiveAndEnabled);
     }
 }
