@@ -23,7 +23,7 @@ public class BaseSelectableObject : MonoBehaviour
 
         
         All = canMove | canRotate | canScale | canRect | relayEditorTools,
-        Default = canMove | canRotate | canScale | canRect 
+        Default = canMove | canRotate | canScale 
     }
     public BaseSelectableObject(IntPtr ptr) : base(ptr) {}
 

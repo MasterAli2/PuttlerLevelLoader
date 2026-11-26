@@ -69,6 +69,22 @@ class EditorToolController : MonoBehaviour
     public Vector2 startScaleToolScale;
     public Vector2 startScaleToolPosition;
 
+    // Rect
+
+    public bool rectingObject;
+
+    public GameObject rectToolObj;
+
+    public CircleCollider2D rectToolBallTR;
+    public CircleCollider2D rectToolBallTL;
+    public CircleCollider2D rectToolBallBR;
+    public CircleCollider2D rectToolBallBL;
+
+    public BoxCollider2D rectToolSideRight;
+    public BoxCollider2D rectToolSideLeft;
+    public BoxCollider2D rectToolSideTop;
+    public BoxCollider2D rectToolSideBottom;
+
 
     void Awake()
     {
@@ -127,6 +143,24 @@ class EditorToolController : MonoBehaviour
             scaleToolRightHead = scaleToolBoundsRight.transform.GetChild(0);
         
         }
+        if (BundleManager.rectToolPrefab != null)
+        {
+            rectToolObj = GameObject.Instantiate(BundleManager.rectToolPrefab);
+            rectToolObj.SetActive(false);        
+
+            Transform ballsHolder = rectToolObj.transform.GetChild(0).GetChild(0);
+            Transform sidesHolder = rectToolObj.transform.GetChild(0).GetChild(1);
+
+            rectToolBallTR = ballsHolder.GetChild(0).GetComponent<CircleCollider2D>();
+            rectToolBallTL = ballsHolder.GetChild(1).GetComponent<CircleCollider2D>();
+            rectToolBallBR = ballsHolder.GetChild(2).GetComponent<CircleCollider2D>();
+            rectToolBallBL = ballsHolder.GetChild(3).GetComponent<CircleCollider2D>();
+
+            rectToolSideRight = sidesHolder.GetChild(0).GetComponent<BoxCollider2D>();
+            rectToolSideLeft = sidesHolder.GetChild(1).GetComponent<BoxCollider2D>();
+            rectToolSideTop = sidesHolder.GetChild(2).GetComponent<BoxCollider2D>();
+            rectToolSideBottom = sidesHolder.GetChild(3).GetComponent<BoxCollider2D>();
+        }
     }
     public void OnSelect()
     {
@@ -137,7 +171,8 @@ class EditorToolController : MonoBehaviour
 
         if ((mode == 1 && (abilities & BaseSelectableObject.Abilities.canMove) == 0) ||
             (mode == 2 && (abilities & BaseSelectableObject.Abilities.canRotate) == 0) ||
-            (mode == 3 && (abilities & BaseSelectableObject.Abilities.canScale) == 0))
+            (mode == 3 && (abilities & BaseSelectableObject.Abilities.canScale) == 0) ||
+            (mode == 4 && (abilities & BaseSelectableObject.Abilities.canRect) == 0))
         {
             return;
         }
@@ -164,6 +199,14 @@ class EditorToolController : MonoBehaviour
             scaleToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
             scaleToolObj.transform.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
         }
+        else if (mode == 4)
+        {
+            rectToolObj.SetActive(true);
+            rectToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
+            rectToolObj.transform.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
+
+            FitRectToolToBasic(EditorManager.Instance.mainSelectedObject.transform);
+        }
     }
     public void OnDeSelect()
     {
@@ -178,6 +221,9 @@ class EditorToolController : MonoBehaviour
         scaleToolObj.SetActive(false);
         scaleToolObj.transform.rotation = Quaternion.identity;
         scalingObject = false;
+
+        rectToolObj.SetActive(false);
+        rectingObject = false;
     }
     void Update()
     {
@@ -185,7 +231,14 @@ class EditorToolController : MonoBehaviour
         Move();
         Rotate();
         Scale();
+
+        Rect();
+
         Trash();
+    }
+    void Rect()
+    {
+        
     }
 
     void Trash()
@@ -547,6 +600,44 @@ class EditorToolController : MonoBehaviour
         scaleToolRightHead.localScale = rightHeadScale;
     }
 
+    void FitRectToolToBasic(Transform target)
+    {
+        rectToolObj.transform.localScale = target.localScale*0.55f;
+
+        Transform balls = rectToolObj.transform.GetChild(0).GetChild(0);
+        Transform sides = rectToolObj.transform.GetChild(0).GetChild(1);
+        for (int i = 0; i < balls.childCount; i++)
+        {
+            Transform ball = balls.GetChild(i);
+            ball.localScale = new Vector3(
+                0.35f/rectToolObj.transform.localScale.x,
+                0.35f/rectToolObj.transform.localScale.y,
+                ball.localScale.z
+            );
+        }
+
+        Transform leftSide = sides.GetChild(0);
+        var leftSideScale = leftSide.localScale;
+        leftSideScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        leftSide.localScale = leftSideScale;
+
+        Transform rightSide = sides.GetChild(1);
+        var rightSideScale = rightSide.localScale;
+        rightSideScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        rightSide.localScale = rightSideScale;
+
+        Transform bottomSide = sides.GetChild(2);
+        var bottomSideScale = bottomSide.localScale;
+        bottomSideScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        bottomSide.localScale = bottomSideScale;
+
+        Transform topSide = sides.GetChild(3);
+        var topSideScale = topSide.localScale;
+        topSideScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        topSide.localScale = topSideScale;
+
+    }
+
     public void Cancel()
     {
         if (!movingObject || EditorManager.Instance.mainSelectedObject == null) return;
@@ -564,6 +655,16 @@ class EditorToolController : MonoBehaviour
             (c == rotateToolButton && rotateToolButton.isActiveAndEnabled) ||
             (c == scaleToolBoundsCenter && scaleToolBoundsCenter.isActiveAndEnabled) ||
             (c == scaleToolBoundsUp && scaleToolBoundsUp.isActiveAndEnabled) ||
-            (c == scaleToolBoundsRight && scaleToolBoundsRight.isActiveAndEnabled);
+            (c == scaleToolBoundsRight && scaleToolBoundsRight.isActiveAndEnabled) ||
+
+            (c == rectToolBallTR && rectToolBallTR.isActiveAndEnabled) ||
+            (c == rectToolBallTL && rectToolBallTL.isActiveAndEnabled) ||
+            (c == rectToolBallBR && rectToolBallBR.isActiveAndEnabled) ||
+            (c == rectToolBallBL && rectToolBallBL.isActiveAndEnabled) ||
+
+            (c == rectToolSideRight && rectToolSideRight.isActiveAndEnabled) ||
+            (c == rectToolSideLeft && rectToolSideLeft.isActiveAndEnabled) ||
+            (c == rectToolSideTop && rectToolSideTop.isActiveAndEnabled) ||
+            (c == rectToolSideBottom && rectToolSideBottom.isActiveAndEnabled);
     }
 }

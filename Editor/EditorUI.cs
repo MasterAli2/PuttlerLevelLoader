@@ -74,6 +74,9 @@ public class EditorUI : MonoBehaviour
         
         leftBar.transform.GetChild(2).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
         leftBar.transform.GetChild(2).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(3);}));
+    
+        leftBar.transform.GetChild(3).GetComponent<Button>().onClick = new Button.ButtonClickedEvent();
+        leftBar.transform.GetChild(3).GetComponent<Button>().onClick.AddListener((System.Action)(() => {EditorToolController.Instance.setMode(4);}));
     }
 
     void doTopBar()

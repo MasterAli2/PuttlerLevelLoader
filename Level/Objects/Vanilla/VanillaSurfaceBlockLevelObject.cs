@@ -20,4 +20,9 @@ public class VanillaSurfaceBlockLevelObject : BaseLevelObject
 
         return serialLevelObject;
     }
+
+    public override BaseSelectableObject.Abilities GetAbilities()
+    {
+        return BaseSelectableObject.Abilities.All;
+    }
 }

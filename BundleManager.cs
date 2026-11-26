@@ -73,6 +73,13 @@ public static class BundleManager
             return getGameobjectFromMainBundleOrNull("ScaleTool");
         }
     }
+    public static GameObject? rectToolPrefab
+    {
+        get
+        {
+            return getGameobjectFromMainBundleOrNull("RectTool");
+        }
+    }
 
     public static GameObject? testPrefab
     {
