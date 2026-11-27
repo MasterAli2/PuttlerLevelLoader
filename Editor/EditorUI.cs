@@ -185,7 +185,7 @@ public class EditorUI : MonoBehaviour
 
         var bagHolder = editorButtons1.transform.GetChild(0);
 
-        var objects = new[] { "block", "portal" , "blackhole", "", "", "moving platform", "", "", ""};
+        var objects = new[] { "block", "portal" , "blackhole", "hole", "", "moving platform", "", "", ""};
 
         for (int index = 0; index < objects.Length; index++)
         {

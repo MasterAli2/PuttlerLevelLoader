@@ -7,8 +7,6 @@ using UnityEngine;
 public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
 {
     public static GameObject prefab;
-    public static Sprite sprite;
-
     public override BaseLevelObject Place(SerialLevelObject serialLevelObject)
     {
         GameObject obj = placeLevelHole(Vec3D.fromJson(serialLevelObject.data["pos"]), serialLevelObject.data["rot"].GetSingle(), Vec3D.fromJson(serialLevelObject.data["size"]));
@@ -21,12 +19,6 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
 
     public override void CleanScene()
     {
-        if (sprite == null)
-        {
-            Texture2D tex = Texture2D.whiteTexture;
-            sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), tex.width);
-        }
-
         prefab = GameObject.Find("Level Hole");
         Utils.HideAndDisable(prefab);
     }
@@ -43,28 +35,29 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
         Transform rightSide = obj.transform.GetChild(5);
         Transform middleSide = obj.transform.GetChild(6);
         float diffA = leftSide.localPosition.y - middleSide.localPosition.y;
+        diffA *= 2f;
 
         float rightSize, leftSize, vertSize;
-        rightSize = size.x;
-        leftSize = size.y;
+        rightSize = size.x/2f-0.4096f/2f;
+        leftSize = size.y/2f-0.4096f/2f;
         vertSize = size.z;
 
         SpriteRenderer leftSpriteRenderer = leftSide.GetComponent<SpriteRenderer>();
         if (leftSpriteRenderer != null)
         {
-            leftSpriteRenderer.sprite = sprite;
+            leftSpriteRenderer.sprite = Utils.RuntimeSprite.square;
             leftSpriteRenderer.color = Color.black;
         }
         SpriteRenderer rightSpriteRenderer = rightSide.GetComponent<SpriteRenderer>();
         if (rightSpriteRenderer != null)
         {
-            rightSpriteRenderer.sprite = sprite;
+            rightSpriteRenderer.sprite = Utils.RuntimeSprite.square;
             rightSpriteRenderer.color = Color.black;
         }
         SpriteRenderer middleSpriteRenderer = middleSide.GetComponent<SpriteRenderer>();
         if (middleSpriteRenderer != null)
         {
-            middleSpriteRenderer.sprite = sprite;
+            middleSpriteRenderer.sprite = Utils.RuntimeSprite.square;
             middleSpriteRenderer.color = Color.black;
         }
 
@@ -87,8 +80,9 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
 
         Utils.ResizeX(rightSide, rightSize, true);
         Utils.ResizeY(rightSide, vertSize, false);
-        
-        Utils.ResizeY(middleSide, vertSize-1*diffA, false);
+
+        middleSide.localPosition = new Vector3(middleSide.localPosition.x, leftSide.localPosition.y - diffA / 2f, middleSide.localPosition.z);
+        middleSide.localScale = new Vector3(0.4096f, leftSide.localScale.y-diffA, middleSide.localScale.z);
 
         leftSide.GetComponent<BoxCollider2D>().size = Vector2.one;
         rightSide.GetComponent<BoxCollider2D>().size = Vector2.one;
@@ -104,7 +98,7 @@ public class VanillaHoleLevelObjectDefinition : LevelObjectDefinition
         SerialLevelObject serialLevelObject = new SerialLevelObject();
 
         serialLevelObject.data["pos"] = Vec3D.toJson(Vector3.zero);
-        serialLevelObject.data["size"] = Vec3D.toJson(Vector3.one);
+        serialLevelObject.data["size"] = Vec3D.toJson(new(2f, 3f, 1f));
         serialLevelObject.data["rot"] = JsonDocument.Parse("0").RootElement;
 
         return Place(serialLevelObject);

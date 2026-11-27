@@ -205,7 +205,7 @@ class EditorToolController : MonoBehaviour
             rectToolObj.transform.position = EditorManager.Instance.mainSelectedObject.transform.position;
             rectToolObj.transform.rotation = EditorManager.Instance.mainSelectedObject.transform.rotation;
 
-            FitRectToolToBasic(EditorManager.Instance.mainSelectedObject.transform);
+            FitRectToolToLevelHoleObj(EditorManager.Instance.mainSelectedObject.transform);
         }
     }
     public void OnDeSelect()
@@ -600,12 +600,37 @@ class EditorToolController : MonoBehaviour
         scaleToolRightHead.localScale = rightHeadScale;
     }
 
-    void FitRectToolToBasic(Transform target)
+    void FitRectToolToLevelHoleObj(Transform target)
     {
-        rectToolObj.transform.localScale = target.localScale*0.55f;
+        rectToolObj.transform.localScale = target.localScale;
+
+        Transform holeBack = target.GetChild(3);
+        Transform middleSide = target.GetChild(6);
+        Transform leftSide = target.GetChild(4);
+        Transform rightSide = target.GetChild(5);
+
+        // get world pos of each side
+        Vector3 holeBackTopEdge = holeBack.TransformPoint(new Vector3(0f, 0.5f, 0f));
+        Vector3 middleSideBottomEdge = middleSide.TransformPoint(new Vector3(0f, -0.5f, 0f));
+        Vector3 leftSideEdge = leftSide.TransformPoint(new Vector3(-0.5f, 0f, 0f));
+        Vector3 rightSideEdge = rightSide.TransformPoint(new Vector3(0.5f, 0f, 0f));
+
+        Vector3 bottomLeftCorner = leftSide.TransformPoint(new Vector3(-0.5f, -0.5f, 0f));
+        Vector3 topRightCorner = rightSide.TransformPoint(new Vector3(0.5f, 0.5f, 0f));
+
+        Vector3 center = (bottomLeftCorner + topRightCorner) / 2f; 
+
+        rectToolObj.transform.position = center;
+
+        rectToolObj.transform.localScale = new(
+            Vector3.Distance(leftSideEdge, rightSideEdge),
+            Vector3.Distance(holeBackTopEdge, middleSideBottomEdge),
+            1f
+        );
 
         Transform balls = rectToolObj.transform.GetChild(0).GetChild(0);
         Transform sides = rectToolObj.transform.GetChild(0).GetChild(1);
+
         for (int i = 0; i < balls.childCount; i++)
         {
             Transform ball = balls.GetChild(i);
@@ -616,25 +641,63 @@ class EditorToolController : MonoBehaviour
             );
         }
 
-        Transform leftSide = sides.GetChild(0);
-        var leftSideScale = leftSide.localScale;
-        leftSideScale.x = 0.05f / rectToolObj.transform.localScale.x;
-        leftSide.localScale = leftSideScale;
+        Transform leftLine = sides.GetChild(0);
+        var leftLineScale = leftLine.localScale;
+        leftLineScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        leftLine.localScale = leftLineScale;
 
-        Transform rightSide = sides.GetChild(1);
-        var rightSideScale = rightSide.localScale;
-        rightSideScale.x = 0.05f / rectToolObj.transform.localScale.x;
-        rightSide.localScale = rightSideScale;
+        Transform rightLine = sides.GetChild(1);
+        var rightLineScale = rightLine.localScale;
+        rightLineScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        rightLine.localScale = rightLineScale;
 
-        Transform bottomSide = sides.GetChild(2);
-        var bottomSideScale = bottomSide.localScale;
-        bottomSideScale.x = 0.05f / rectToolObj.transform.localScale.y;
-        bottomSide.localScale = bottomSideScale;
+        Transform bottomLine = sides.GetChild(2);
+        var bottomLineScale = bottomLine.localScale;
+        bottomLineScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        bottomLine.localScale = bottomLineScale;
 
-        Transform topSide = sides.GetChild(3);
-        var topSideScale = topSide.localScale;
-        topSideScale.x = 0.05f / rectToolObj.transform.localScale.y;
-        topSide.localScale = topSideScale;
+        Transform topLine = sides.GetChild(3);
+        var topLineScale = topLine.localScale;
+        topLineScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        topLine.localScale = topLineScale;
+
+    }
+
+    void FitRectToolToBasic(Transform target)
+    {
+        rectToolObj.transform.localScale = target.localScale*0.55f;
+
+        Transform balls = rectToolObj.transform.GetChild(0).GetChild(0);
+        Transform lines = rectToolObj.transform.GetChild(0).GetChild(1);
+        for (int i = 0; i < balls.childCount; i++)
+        {
+            Transform ball = balls.GetChild(i);
+            ball.localScale = new Vector3(
+                0.35f/rectToolObj.transform.localScale.x,
+                0.35f/rectToolObj.transform.localScale.y,
+                ball.localScale.z
+            );
+        }
+
+        Transform leftLine = lines.GetChild(0);
+        var leftLineScale = leftLine.localScale;
+        leftLineScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        leftLine.localScale = leftLineScale;
+
+        Transform rightLine = lines.GetChild(1);
+        var rightLineScale = rightLine.localScale;
+        rightLineScale.x = 0.05f / rectToolObj.transform.localScale.x;
+        rightLine.localScale = rightLineScale;
+
+        Transform bottomLine = lines.GetChild(2);
+        var bottomLineScale = bottomLine.localScale;
+        bottomLineScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        bottomLine.localScale = bottomLineScale;
+
+        Transform topLine = lines.GetChild(3);
+        var topLineScale = topLine.localScale;
+        topLineScale.x = 0.05f / rectToolObj.transform.localScale.y;
+        topLine.localScale = topLineScale;
 
     }
 

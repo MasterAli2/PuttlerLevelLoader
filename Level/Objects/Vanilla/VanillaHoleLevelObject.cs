@@ -9,8 +9,10 @@ public class VanillaHoleLevelObject : BaseLevelObject
 
     public VanillaHoleLevelObject(IntPtr ptr) : base(ptr) {}
 
-    // this is kept here cuz of how complicated it is, i have no idea how and why this works
 
 
-
+    public override BaseSelectableObject.Abilities GetAbilities()
+    {
+        return BaseSelectableObject.Abilities.All;
+    }
 }

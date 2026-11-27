@@ -103,6 +103,9 @@ public static class Utils
         collider.callbackLayers = 0;
     }
 
+    // For anyone confused as to what this does it just creates sprites at runtime cuz im too lazy to import them as an asset bundle
+    // the square one is used to reset the any square objects the game uses as they use a weird sprite with 2.56 texture ratio or whatever its called and that messes up scaling
+    // circle is used for the moving platform position indicators
     public static class RuntimeSprite
     {
         public const int BASE_TEX_SIZE = 256;
